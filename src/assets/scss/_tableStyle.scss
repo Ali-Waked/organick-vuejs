@@ -1,0 +1,46 @@
+.v-table {
+  margin-top: 16px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  > .v-table__wrapper > table {
+    thead {
+      tr {
+        background-color: $green-sheen;
+        th {
+          font-size: 18px;
+          font-weight: bold;
+          color: #fff;
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:nth-of-type(even) {
+          background-color: $cultured;
+          // background-color: $hint-of-green;
+        }
+        td {
+          font-size: 16px;
+          color: $arapawa;
+          // font-weight: 500;
+          &:first-of-type.italic-bold {
+            color: $altamira;
+            font-weight: bold;
+            font-style: italic;
+          }
+          i {
+            background-color: transparent;
+            color: var(--color);
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            border-radius: 50%;
+            &:hover {
+              background-color: var(--background-color);
+            }
+          }
+        }
+      }
+    }
+  }
+}

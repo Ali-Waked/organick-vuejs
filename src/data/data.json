@@ -1,0 +1,49 @@
+{
+"abilities": {
+  "categories": {
+    "view categories": "view.categories",
+    "create category": "create.category",
+    "update category": "update.category",
+    "show category": "show.category",
+    "delete category": "delete.category"
+  },
+  "products": {
+    "view products": "view.products",
+    "create product": "create.product",
+    "update product": "update.product",
+    "show product": "show.product",
+    "delete product": "delete.product",
+    "restore product": "restore.product",
+    "delete product forever": "delete.product.forever"
+  },
+  "orders": {
+    "view orders": "view.orders",
+    "show order" : "show.order",
+    "update order": "update.order",
+    "request order": "request.order",
+    "cancel order" : "cancel.order"
+ },
+  "blogs": {
+    "view blogs": "view.blogs",
+    "create blog": "create.blog",
+    "update blog": "update.blog",
+    "delete blog": "delete.blog"
+ },
+  "users": {
+    "view users": "view.users",
+    "update blog": "update.blog",
+    "delete blog": "delete.blog"
+ },
+  "team members": {
+    "view team mebers": "view.team_mebers",
+    "add team meber": "add.team_member",
+    "update team meber": "update.team_member",
+    "delete team meber": "delete.team_member"
+ },
+ "payment methods": {
+  "view payment methods":"view.payment_methods",
+  "update payment method":"update.payment_method"
+ }
+},
+"ability_status": ["allow","inherit","deny"]
+}

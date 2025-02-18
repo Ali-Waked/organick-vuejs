@@ -1,0 +1,11 @@
+<template>
+  <v-pagination
+    color="#7EB693"
+    v-model="page"
+    @update:model-value="changePage"
+    :length="totalPage"
+    rounded="circle"
+    class="mt-8"
+    v-if="shouldShowPagination"
+  ></v-pagination>
+</template>
