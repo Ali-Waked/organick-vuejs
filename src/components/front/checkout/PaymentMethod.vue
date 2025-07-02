@@ -10,7 +10,7 @@
         v-slot="{ isSelected, selectedClass, toggle }"
         :value="payMethod.slug"
       >
-        {{ payMethod.slug }}
+        <!-- {{ payMethod.slug }} -->
         <v-card
           variant="outlined"
           :color="isSelected ? 'blue-lighten-3' : 'grey'"
@@ -34,7 +34,7 @@
         </v-card>
       </v-item>
     </template>
-    {{ method }}
+    <!-- {{ method }} -->
   </v-item-group>
 </template>
 

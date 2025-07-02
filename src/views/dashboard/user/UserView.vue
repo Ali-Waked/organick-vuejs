@@ -1,25 +1,13 @@
 <template>
   <div class="users">
     <PageTitle :title :items />
-    <FilterSection
-      v-model:search="filter.search"
-      search-label="Search By Name Or Email"
-      :addDataLoading="addUserLoading"
-      @add="addUser"
-      :btn-label
-      :show-button="isAdmin"
-    >
-      <template #options
-        ><div
-          class="d-flex flex-column flex-sm-row align-start align-sm-center gr-4 mt-1 mt-md-3"
-        >
+    <FilterSection v-model:search="filter.search" search-label="Search By Name Or Email"
+      :addDataLoading="addUserLoading" @add="addUser" :btn-label :show-button="isAdmin">
+      <template #options>
+        <div class="d-flex flex-column flex-sm-row align-start align-sm-center gr-4 mt-1 mt-md-3">
           <div class="ml-0 ml-md-6">
-            <FilterOption
-              :options="sortOptions"
-              v-model:model-value="filter.sort_by"
-              btn-id="filter_by"
-              btn-label="Sort by"
-            />
+            <FilterOption :options="sortOptions" v-model:model-value="filter.sort_by" btn-id="filter_by"
+              btn-label="Sort by" />
           </div>
           <div class="d-flex align-center">
             <!-- <div class="ml-0 ml-sm-6">
@@ -37,13 +25,8 @@
     </FilterSection>
     <TableData v-if="data.length" :data :is-admin>
       <template #actions="{ item }">
-        <ActionButton
-          icon="mdi-eye"
-          color="#4caf50"
-          background-color="#e5f5e9"
-          @click="ShowUserInfo(item)"
-          tooltip="Show More Information"
-        />
+        <ActionButton icon="mdi-eye" color="#4caf50" background-color="#e5f5e9" @click="ShowUserInfo(item)"
+          tooltip="Show More Information" />
         <!-- <ActionButtons
           v-if="item.type != 'customer'"
           @show="showMemberInfo(item)"
@@ -53,15 +36,8 @@
         /> -->
       </template>
     </TableData>
-    <v-pagination
-      color="#7EB693"
-      v-model="page"
-      @update:model-value="changePage"
-      :length="totalPage"
-      rounded="circle"
-      class="mt-8"
-      v-if="shouldShowPagination"
-    ></v-pagination>
+    <v-pagination color="#7EB693" v-model="page" @update:model-value="changePage" :length="totalPage" rounded="circle"
+      class="mt-8" v-if="shouldShowPagination"></v-pagination>
     <NoDataFound v-if="data.length == 0" />
   </div>
 </template>

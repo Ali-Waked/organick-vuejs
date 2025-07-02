@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!isSubscribe">
     <div
       class="subscribe-section d-flex justify-center ga-6 justify-md-space-between align-center flex-column flex-md-row"
     >
@@ -43,18 +43,34 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref,onMounted, inject } from "vue";
 import { useSubscribeForNewsStore } from "../../../stores/front/subscribeForNews";
 import HeaderSection from "./HeaderSection.vue";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "../../../stores/auth/auth";
 
 const email = ref("");
 const subscribeStore = useSubscribeForNewsStore();
+const isSubscribe = ref(false);
+const emitter = inject('emitter');
 const { errors, message } = storeToRefs(subscribeStore);
 
-const subscribeForNews = async () => {
-  await subscribeStore.subscribeForNews(email.value);
+const subscribeForNews =  () => {
+  subscribeStore.subscribeForNews(email.value);
+  console.log(message.value);
+  setTimeout(() => {
+      if(message.value){
+    emitter.emit('showAlert','Thank you for subscribing!');
+    isSubscribe.value = true;
+  }
+  }, 1000);
 };
+onMounted(() => {
+  if(localStorage.getItem('isSubscribe') || useAuthStore().isAuth) {
+    isSubscribe.value = true;
+  }
+})
+
 </script>
 <style scoped lang="scss">
 .subscribe-section {

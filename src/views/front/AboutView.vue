@@ -3,7 +3,7 @@
     <BannerSection />
     <AboutUs />
     <WhyChooseUs />
-    <OurTeam />
+    <!-- <OurTeam /> -->
     <WhatWeOfferforYou />
     <SubscribeSection />
   </div>

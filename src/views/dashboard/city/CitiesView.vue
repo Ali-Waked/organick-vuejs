@@ -1,34 +1,16 @@
 <template>
   <div class="cities">
     <PageTitle title="Cities" :items />
-    <FilterSection
-      v-if="!loading"
-      v-model:search="filter.name"
-      search-label="Search By City Name"
-      @add="addCity"
-      btn-label="Add New City"
-    />
+    <FilterSection v-if="!loading" v-model:search="filter.name" search-label="Search By City Name" @add="addCity"
+      btn-label="Add New City" />
     <TableData :data="cities" v-if="cities.length">
       <template #actions="{ item }">
-        <ActionButtons
-          @delete="deleteRole(item)"
-          @edit="editCity(item.id)"
-          :tooltip
-        />
+        <ActionButtons @delete="deleteRole(item)" @edit="editCity(item.id)" :tooltip />
       </template>
     </TableData>
-    <DeleteAlert
-      :title="alert.title"
-      :text="alert.text"
-      v-model:dialog="alert.dialog"
-      :extra-data="alert.extraData"
-      @delete="deleteRoleForever($event)"
-    />
-    <AddCity
-      :data="city.data"
-      v-model:dialog="city.dialog"
-      @fetchCities="getCities"
-    />
+    <DeleteAlert :title="alert.title" :text="alert.text" v-model:dialog="alert.dialog" :extra-data="alert.extraData"
+      @delete="deleteRoleForever($event)" />
+    <AddCity :data="city.data" v-model:dialog="city.dialog" @fetchCities="getCities" />
     <NoDataFound v-if="!loading && cities.length == 0" />
   </div>
 </template>
@@ -165,6 +147,6 @@ const getCities = () => {
 onMounted(async () => {
   emitter.emit("showLoading", true);
   filter.name = route.query.search ?? "";
-  await fetchCities();
+  await debouncedFetch();
 });
 </script>

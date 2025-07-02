@@ -1,47 +1,25 @@
 <template>
-  <div
-    class="testimonial-and-counter background-section"
-    ref="testimonial_section"
-  >
+  <div class="testimonial-and-counter background-section" ref="testimonial_section">
     <v-row>
       <v-col cols="2" class="pa-0 d-none d-md-block">
-        <img
-          src="@/assets/images/tesitmonial-left-image.png"
-          alt="left image"
-        />
+        <img src="@/assets/images/tesitmonial-left-image.png" alt="left image" />
       </v-col>
       <v-col cols="12" md="8">
         <div class="content section-padding">
-          <HeaderSection
-            header="Testimonial"
-            title="What Our Customer Saying?"
-            class="text-center"
-          />
-          <swiper
-            :slidePreView="1"
-            class="mt-6"
-            :modules="[Pagination, Autoplay]"
-            :pagination="{ el: '.pagination', clickable: true }"
-            loop
-            :autoplay="{
+          <HeaderSection header="Testimonial" title="What Our Customer Saying?" class="text-center" />
+          <swiper :slidePreView="1" class="mt-6" :modules="[Pagination, Autoplay]"
+            :pagination="{ el: '.pagination', clickable: true }" loop :autoplay="{
               delay: 3000,
               pauseOnMouseEnter: true,
               disableOnInteraction: false,
-            }"
-          >
+            }">
             <swiper-slide v-for="num in 3" :key="num">
               <div class="content text-center">
                 <div class="avatar">
                   <img src="@/assets/images/testimonial-cutomer.jpg" alt="" />
                   <div class="rating">
-                    <v-rating
-                      length="5"
-                      color="#FFA858"
-                      size="20"
-                      model-value="4.5"
-                      half-increments
-                      style="pointer-events: none; font-size: 15px"
-                    ></v-rating>
+                    <v-rating length="5" color="#FFA858" size="20" model-value="4.5" half-increments
+                      style="pointer-events: none; font-size: 15px"></v-rating>
                   </div>
                   <p class="text open-sans">
                     Simply dummy text of the printing and typesetting industry.
@@ -56,52 +34,26 @@
             <div class="pagination"></div>
           </swiper>
           <v-divider color="#666" class="my-14"></v-divider>
-          <div
-            class="counters d-flex justify-space-between align-center flex-wrap ga-4"
-          >
-            <v-progress-circular
-              size="178"
-              bg-color="transparent"
-              :model-value="value"
-              color="#7EB693"
-              class="mx-auto"
-            >
+          <div class="counters d-flex justify-space-between align-center flex-wrap ga-4">
+            <v-progress-circular size="178" bg-color="transparent" :model-value="value" color="#7EB693" class="mx-auto">
               <div class="count">
                 <span class="number roboto"> %{{ organic }} </span>
                 <span class="title open-sans">Organic</span>
               </div>
             </v-progress-circular>
-            <v-progress-circular
-              size="178"
-              bg-color="transparent"
-              :model-value="value"
-              color="#7EB693"
-              class="mx-auto"
-            >
+            <v-progress-circular size="178" bg-color="transparent" :model-value="value" color="#7EB693" class="mx-auto">
               <div class="count">
                 <span class="number roboto">{{ acitveProduct }}</span>
                 <span class="title open-sans">Active Product</span>
               </div>
             </v-progress-circular>
-            <v-progress-circular
-              size="178"
-              bg-color="transparent"
-              :model-value="value"
-              color="#7EB693"
-              class="mx-auto"
-            >
+            <v-progress-circular size="178" bg-color="transparent" :model-value="value" color="#7EB693" class="mx-auto">
               <div class="count">
                 <span class="number roboto">{{ organicOrchads }}+</span>
                 <span class="title open-sans">Organic Orchads</span>
               </div>
             </v-progress-circular>
-            <v-progress-circular
-              size="178"
-              bg-color="transparent"
-              :model-value="value"
-              color="#7EB693"
-              class="mx-auto"
-            >
+            <v-progress-circular size="178" bg-color="transparent" :model-value="value" color="#7EB693" class="mx-auto">
               <div class="count">
                 <span class="number roboto">{{ yearsOfFarming }}+</span>
                 <span class="title open-sans">Years of Farming</span>
@@ -111,10 +63,7 @@
         </div>
       </v-col>
       <v-col cols="2" class="pa-0 d-none d-md-block">
-        <img
-          src="@/assets/images/tesimonial-right-image.png"
-          alt="right image"
-        />
+        <img src="@/assets/images/tesimonial-right-image.png" alt="right image" />
       </v-col>
     </v-row>
   </div>
@@ -145,7 +94,7 @@ onBeforeMount(() => {
 const counter = () => {
   if (
     isNaN(Number(interval.value)) &&
-    window.scrollY >= testimonial_section.value?.offsetTop + 400
+    window.scrollY >= testimonial_section.value?.offsetTop + 200
   ) {
     console.log("hi");
     interval.value = setInterval(() => {
@@ -168,34 +117,41 @@ onMounted(() => {
 <style lang="scss">
 .testimonial-and-counter {
   overflow: hidden;
+
   img {
     width: 100%;
     height: 100%;
   }
+
   .avatar {
     margin-top: 16px;
+
     img {
       width: 110px;
       height: 110px;
       border-radius: 50%;
       margin-bottom: 8px;
     }
+
     p {
       color: $altamira;
       font-size: 15px;
       width: 80%;
       margin: 18px auto 12px;
     }
+
     .customer-name {
       color: $arapawa;
       font-size: 22px;
       font-weight: 500;
     }
+
     .type {
       color: $altamira;
       font-size: 13px;
     }
   }
+
   .content {
     .counters {
       .count {
@@ -211,14 +167,17 @@ onMounted(() => {
         position: relative;
         z-index: 10;
         border: 4px solid #fff;
+
         .number {
           font-size: 38px;
           font-weight: 900;
         }
+
         .title {
           font-size: 14px;
         }
       }
+
       // .count-container {
       //   cursor: default;
       //   width: calc(100% + 5px);
@@ -248,15 +207,18 @@ onMounted(() => {
       // }
     }
   }
+
   .pagination {
     text-align: center;
     margin-top: 12px;
   }
 }
+
 .swiper-pagination-bullet {
   margin: 2px !important;
   background-color: #c4c4c4;
 }
+
 .swiper-pagination-bullet-active {
   background-color: $green-sheen !important;
 }

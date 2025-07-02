@@ -14,15 +14,17 @@ export const useCheckoutStore = defineStore("checkout", () => {
   const checkout = async () => {
     try {
       loading.value = true;
+      orderAddress.value.city_id = orderAddress.value.city_id.value;
       const response = await axiosClient.post("/checkout", {
         ...orderAddress.value,
-        country: orderAddress.value.country.value,
+        // country: orderAddress.value.country.value,
+        currency: 'USD',
         pay_method: pay_method.value,
       });
       // .then((response) => {
       console.log(response);
       if ((response.status = 201)) {
-        // useCartStore().empty();
+        useCartStore().empty();
         if (response.data.payment_method_details.name == "stripe") {
           const stripe = await new loadStripe(
             response.data.payment_method_details.publishable_key
@@ -46,6 +48,7 @@ export const useCheckoutStore = defineStore("checkout", () => {
     } catch (error) {
       console.error("error", error);
       stepper.value = 1;
+      console.log(error);
       errors.value = error.response.data.errors;
     } finally {
       loading.value = false;

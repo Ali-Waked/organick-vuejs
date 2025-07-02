@@ -50,7 +50,7 @@ const dynamicRoutes = userRoutes.flatMap((user) => {
       meta: {
         title: subRoute.replaceAll("-", " "),
       },
-      component: () => import(componentPath),
+      component: /* @vite-ignore */ () => import(componentPath),
     };
   });
 
@@ -106,19 +106,19 @@ const routes = [
       },
       {
         path: "/news",
-        name: "blogs",
+        name: "news",
         meta: {
           title: "News",
         },
-        component: () => import("@/views/front/BlogsView.vue"),
+        component: () => import("@/views/front/NewsView.vue"),
       },
       {
         path: "/news/single",
-        name: "show-blog",
+        name: "show-news",
         meta: {
           title: "News",
         },
-        component: () => import("@/views/front/SingleBlogView.vue"),
+        component: () => import("@/views/front/SingleNewsView.vue"),
       },
       {
         path: "/services",
@@ -177,14 +177,32 @@ const routes = [
         },
         component: () => import("@/views/auth/UserLoginView.vue"),
       },
+      // {
+      //   path: "/admin/login",
+      //   name: "admin-login",
+      //   meta: {
+      //     title: "Login",
+      //     requiresGuest: true,
+      //   },
+      //   component: () => import("@/views/auth/MemberLoginView.vue"),
+      // },
       {
-        path: "/admin/login",
-        name: "admin-login",
+        path: "/:role/login",
+        name: "role-login",
+        beforeEnter: (to, from, next) => {
+          const validRoles = ["admin", "driver", "moderator"];
+          if (validRoles.includes(to.params.role)) {
+            next();
+          } else {
+            next({ name: "page-not-found" });
+          }
+        },
         meta: {
           title: "Login",
           requiresGuest: true,
         },
         component: () => import("@/views/auth/MemberLoginView.vue"),
+        props: true,
       },
       {
         path: "/team-member/login",
@@ -212,6 +230,15 @@ const routes = [
           requiresAuth: true,
         },
         component: () => import("@/views/front/OrdersView.vue"),
+      },
+      {
+        path: "/my-orders/:order",
+        name: "single-order",
+        meta: {
+          title: "Show Order Details",
+          requiresAuth: true,
+        },
+        component: () => import("@/views/front/SingleOrderView.vue"),
       },
       {
         path: "/my-profile",
@@ -371,36 +398,36 @@ const routes = [
           import("@/views/dashboard/product/ShowProductView.vue"),
       },
       {
-        path: "blogs",
-        name: "dashboard-blogs",
+        path: "news",
+        name: "dashboard-news",
         meta: {
-          title: "Blogs",
+          title: "News",
         },
-        component: () => import("@/views/dashboard/blog/BlogsView.vue"),
+        component: () => import("@/views/dashboard/news/NewsView.vue"),
       },
       {
-        path: "blogs/add-new-blog",
-        name: "dashboard-add-blog",
+        path: "news/add-new-news",
+        name: "dashboard-add-news",
         meta: {
-          title: "Add Blogs",
+          title: "Add News",
         },
-        component: () => import("@/views/dashboard/blog/AddBlogView.vue"),
+        component: () => import("@/views/dashboard/news/AddNewsView.vue"),
       },
       {
-        path: "blogs/edit",
-        name: "dashboard-edit-blog",
+        path: "news/edit",
+        name: "dashboard-edit-news",
         meta: {
-          title: "Edit Blogs",
+          title: "Edit News",
         },
-        component: () => import("@/views/dashboard/blog/AddBlogView.vue"),
+        component: () => import("@/views/dashboard/news/AddNewsView.vue"),
       },
       // {
-      //   path: "blogs/:blog/show",
-      //   name: "dashboard-show-blog",
+      //   path: "news/:news/show",
+      //   name: "dashboard-show-news",
       //   meta: {
-      //     title: "show Blogs",
+      //     title: "show News",
       //   },
-      //   component: () => import("@/views/dashboard/blog/ShowBlogView.vue"),
+      //   component: () => import("@/views/dashboard/news/ShowNewsView.vue"),
       // },
       {
         path: "messages",
@@ -617,21 +644,26 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  window.scrollTo(0, 0);
+  let position = { x: 0, y: 0 };
+  if (sessionStorage.getItem("scrollPosition")) {
+    position = JSON.parse(sessionStorage.getItem("scrollPosition"));
+    sessionStorage.removeItem("scrollPosition");
+  }
+  console.log('options', position);
+  window.scrollTo(position.x, position.y);
   document.title = to.meta.title;
-  console.log("include", to.fullPath.includes("admin"));
   if (to.meta.requiresAuth) {
     if (useAuthStore().isAuth) {
       next();
     } else {
       if (to.fullPath.includes("admin")) {
-        next({ name: "admin-login" });
+        next({ name: "role-login", params: { role: "admin" } });
       }
       if (to.fullPath.includes("driver")) {
-        next({ name: "driver-login" });
+        next({ name: "role-login", params: { role: "driver" } });
       }
       if (to.fullPath.includes("moderator")) {
-        next({ name: "moderator-login" });
+        next({ name: "role-login", params: { role: "moderator" } });
       }
       next({ name: "login" });
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="shop">
+  <div class="shop roboto">
     <BannerSection />
     <ShopProducts />
     <SubscribeSection />

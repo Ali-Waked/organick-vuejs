@@ -4,12 +4,8 @@
     <!-- <img src="@" alt="image" /> -->
     <div class="image"></div>
     <v-container>
-      <div
-        class="details elevation-12 rounded-xl d-flex flex-column justify-center bg-white"
-      >
-        <ul
-          class="d-flex px-14 roboto gc-6 flex-column flex-sm-row gr-1 gr-sm-0 align-start align-sm-center pt-10"
-        >
+      <div class="details elevation-12 rounded-xl d-flex flex-column justify-center bg-white">
+        <ul class="d-flex px-14 roboto gc-6 flex-column flex-sm-row gr-1 gr-sm-0 align-start align-sm-center pt-10">
           <li>
             <span>Posted On: </span> <span class="date">January 6, 2022</span>
           </li>
@@ -90,9 +86,9 @@
 
 <style lang="scss">
 .portfolio-details {
-  > .image {
+  >.image {
     height: 70vh;
-    background-image: url("@/assets/images/single-blog.png");
+    background-image: url("@/assets/images/single-news.png");
     background-size: cover;
     background-position: center;
   }
@@ -101,17 +97,20 @@
     margin-top: -170px;
     overflow: hidden;
     height: 300px;
-    > ul {
+
+    >ul {
       li {
         span {
           color: $arapawa;
           font-size: 14px;
+
           &:first-of-type {
             font-weight: bold;
           }
         }
       }
     }
+
     div {
       background-color: #fff;
       width: 100%;
@@ -158,17 +157,20 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
+
     ul,
     ol {
       color: $altamira;
       font-size: 15px;
       margin: 24px 0;
       margin-left: 32px;
+
       li {
         // list-style-type: disc;
         margin: 12px 0;
       }
     }
+
     q {
       color: $arapawa;
       font-size: 20px;
@@ -178,6 +180,7 @@
       padding: 60px 40px;
       display: block;
       border-radius: 24px;
+
       @media (max-width: 599px) {
         padding: 20px;
         font-size: 15px;
@@ -198,15 +201,18 @@
         color: $altamira;
         margin-top: 12px;
       }
+
       @media (max-width: 959px) {
         h3 {
           font-size: 28px;
         }
       }
+
       @media (max-width: 599px) {
         h3 {
           font-size: 22px;
         }
+
         p {
           font-size: 14px;
         }
@@ -224,6 +230,7 @@
       text-align: center;
       margin-top: 4px;
     }
+
     @media (max-width: 599px) {
       max-width: 90%;
     }

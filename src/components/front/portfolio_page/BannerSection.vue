@@ -1,7 +1,7 @@
 <template>
   <div class="banner-section d-flex position-relative">
     <div class="image"></div>
-    <h2 class="position-absolute roboto">{{ title }}</h2>
+    <h2 class="position-absolute roboto position-relative">{{ title }}</h2>
     <div class="image"></div>
     <span class="shep"></span>
     <span class="shep"></span>
@@ -49,6 +49,7 @@ defineProps({
     color: $arapawa;
     font-weight: 900;
     text-wrap: nowrap;
+    z-index: 10;
   }
   span.shep {
     position: absolute;

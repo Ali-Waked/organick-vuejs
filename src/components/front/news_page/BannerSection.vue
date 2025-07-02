@@ -11,17 +11,19 @@
 
 <style scoped lang="scss">
 .banner-section {
-  background: url("@/assets/images/blogs.png");
+  background: url("@/assets/images/news.png");
   background-color: #f8f8fa;
   background-size: cover;
   background-position: center;
   overflow: hidden;
   height: 380px;
+
   @media (max-width: 959px) {
     background-color: #f1edee;
     height: 350px;
     background-image: unset;
   }
+
   h2 {
     top: 50%;
     left: 50%;
@@ -31,11 +33,13 @@
     font-weight: 900;
     text-wrap: nowrap;
   }
+
   span.shep {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
     &:first-of-type {
       &::before {
         content: url("@/assets/images/banner icon/Pattern.png");
@@ -44,6 +48,7 @@
         left: -100px;
       }
     }
+
     &:nth-of-type(2) {
       &::after {
         content: url("@/assets/images/banner icon/Pattern-two.png");
@@ -51,6 +56,7 @@
         bottom: -220px;
         left: 300px;
       }
+
       &::before {
         content: url("@/assets/images/banner icon/Pattern-three.png");
         position: absolute;
@@ -58,6 +64,7 @@
         left: 200px;
       }
     }
+
     &:last-of-type {
       &::after {
         content: url("@/assets/images/banner icon/Pattern-five.png");

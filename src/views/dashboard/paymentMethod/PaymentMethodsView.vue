@@ -4,13 +4,8 @@
     <div v-if="data.length">
       <TableData :data>
         <template #actions="{ item }">
-          <ActionButton
-            icon="mdi-wrench"
-            color="#274C5B"
-            background-color="#274c5b17"
-            @click="editPaymentMethod(item)"
-            tooltip="Edit Configration"
-          />
+          <ActionButton icon="mdi-wrench" color="#274C5B" background-color="#274c5b17" @click="editPaymentMethod(item)"
+            tooltip="Edit Configration" />
         </template>
       </TableData>
     </div>
@@ -27,6 +22,7 @@ import NoDataFound from "@/components/dashboard/global/NoDataFound.vue";
 import ActionButton from "@/components/dashboard/global/ActionButton.vue";
 import TableData from "@/components/dashboard/paymentMethod/TableData.vue";
 import axiosClient from "@/axiosClient";
+import debounce from "lodash.debounce";
 const router = useRouter();
 const loading = ref(true);
 const data = ref([]);
@@ -56,15 +52,23 @@ const fetchPaymentMethods = async () => {
 
 const editPaymentMethod = ({ slug, name }) => {
   emitter.emit("showLoading", true);
-
   router.push({
     name: "dashboard-eidt-payment-method",
     query: { payment_method_name: name, payment_method: slug },
   });
 };
 
+const debouncedFetch = debounce(async () => {
+  await fetchPaymentMethods();
+  emitter.emit("showLoading", false);
+}, 750);
+
+onBeforeUnmount(() => {
+  debouncedFetch.cancel();
+});
+
 onMounted(async () => {
   emitter.emit("showLoading", true);
-  await fetchPaymentMethods();
+  await debouncedFetch();
 });
 </script>

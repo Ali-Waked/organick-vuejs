@@ -6,14 +6,15 @@
         title="Our Products"
         class="text-center"
       />
-      <v-row class="pt-12" justify="center" v-if="data.length > 0">
+      <v-row class="pt-12" justify="center" v-if="products.length > 0">
         <v-col
           cols="9"
           sm="6"
           md="4"
           lg="3"
-          v-for="product in data"
+          v-for="product in products"
           :key="product.id"
+          class="overflow-hidden"
         >
           <ProductItem
             :rating="4.5"
@@ -23,6 +24,8 @@
             :new-price="product.price"
             :image="product.image"
             :slug="product.slug"
+            :product-id="product.id"
+            v-model:is-favorite="product.isFavorite"
           />
         </v-col>
       </v-row>
@@ -45,7 +48,7 @@
 <script setup>
 import HeaderSection from "@/components/front/global/HeaderSection.vue";
 import ProductItem from "@/components/front/global/ProductItem.vue";
-import { inject, onMounted } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useProductStore } from "../../../stores/front/product";
 import { storeToRefs } from "pinia";
@@ -54,6 +57,7 @@ const router = useRouter();
 const emitter = inject("emitter");
 const productStore = useProductStore();
 const { data } = storeToRefs(productStore);
+const products = ref([]);
 const showLoading = () => {
   emitter.emit("showLoading");
   window.scrollTo(0, 0);
@@ -61,7 +65,9 @@ const showLoading = () => {
 };
 
 onMounted(async () => {
-  await productStore.getProducts();
+  await productStore.getProducts().then(() => {
+    products.value = data.value.slice(0,8);
+  });
 });
 </script>
 

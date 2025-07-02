@@ -20,6 +20,7 @@ export const useSubscribeForNewsStore = defineStore(
           console.log("response", response);
           if (response.status == "200") {
             message.value = response.data.message;
+            localStorage.setItem('isSubscribe', true);
           }
           errors.value = {};
         })

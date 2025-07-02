@@ -33,6 +33,7 @@
         ></v-progress-circular>
       </v-dialog>
       <slot></slot>
+      <MainAlert :text />
     </v-main>
     <AppFooter />
   </v-layout>
@@ -47,10 +48,13 @@ import NavDrawer from "./NavDrawer.vue";
 import CartDrawer from "./CartDrawer.vue";
 import { useLoadingStore } from "@/stores/loading";
 import { storeToRefs } from "pinia";
+import MainAlert from "./MainAlert.vue";
 
 const loadingStore = useLoadingStore();
 const { loading } = storeToRefs(loadingStore);
 const isFixed = ref(false);
+
+const text = ref('');
 
 // const loading = false;
 const emitter = inject("emitter");
@@ -79,6 +83,12 @@ onMounted(() => {
     // getCurrentInstance().appContext.config.globalProperties.loading =
     // loading.value = true;
   });
+  emitter.on('showAlert',(value)=>{
+    text.value = value;
+    setTimeout(() => {
+      text.value = ''
+    }, 8000);
+  })
 });
 </script>
 

@@ -17,7 +17,7 @@
             <img :src="item.icon" :alt="item.name" />
           </td>
           <td>{{ item.name }}</td>
-          <td :class="getStatusClass(item.status)">{{ item.status }}</td>
+          <td :class="getStatusClass(item.is_active)">{{ item.is_active ? 'Active' : 'In-Achive' }}</td>
           <td>{{ dateFormat(item.created_at) }}</td>
           <td>{{ dateFormat(item.updated_at) }}</td>
           <td class="d-flex align-center justify-center">
@@ -51,16 +51,16 @@ const isUserPage = computed(() => {
   }
 });
 const getStatusClass = (status) => {
-  const lowerStatus = toLower(status);
   return {
     "text-capitalize": true,
-    "text-green": lowerStatus === "active",
-    "text-red": lowerStatus !== "active",
+    "text-green": status,
+    "text-red": !status,
   };
 };
 </script>
 <style lang="scss">
 @import "@/assets/scss/_tableStyle.scss";
+
 td {
   img {
     width: 60px;

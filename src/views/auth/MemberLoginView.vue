@@ -7,31 +7,12 @@
         </v-col>
         <v-col cols="12" sm="10" md="6" class="mt-0 mt-md-16">
           <div class="form-container">
-            <form
-              @submit.prevent="login"
-              class="open-sans d-block w-100 mt-0 mt-md-10"
-            >
-              <v-text-field
-                label="Enter Your Email"
-                type="email"
-                variant="outlined"
-                color="#274C5B"
-                :error-messages="errors.email"
-                v-model="email"
-                class="mb-2"
-              ></v-text-field>
-              <v-text-field
-                label="Enter Your Password"
-                type="password"
-                variant="outlined"
-                color="#274C5B"
-                :error-messages="errors.password"
-                v-model="password"
-                class="mb-2"
-              ></v-text-field>
-              <v-btn class="text-none w-100" type="submit" height="50" :loading
-                >Login</v-btn
-              >
+            <form @submit.prevent="login" class="open-sans d-block w-100 mt-0 mt-md-10">
+              <v-text-field label="Enter Your Email" type="email" variant="outlined" color="#274C5B"
+                :error-messages="errors.email" v-model="email" class="mb-2"></v-text-field>
+              <v-text-field label="Enter Your Password" type="password" variant="outlined" color="#274C5B"
+                :error-messages="errors.password" v-model="password" class="mb-2"></v-text-field>
+              <v-btn class="text-none w-100" type="submit" height="50" :loading>Login</v-btn>
             </form>
           </div>
         </v-col>
@@ -62,7 +43,7 @@ const route = useRoute();
 const login = async () => {
   await auth.login({ email: email.value, password: password.value });
   if (redirect) {
-    router.push({ name: "dashboard" });
+    router.push({ name: "dashboard", params: { role: 'admin' } });
   }
 };
 const LoginWith = (driver) => {
@@ -76,23 +57,28 @@ onMounted(() => {
 <style lang="scss" scoped>
 .login {
   .form-container {
+
     // height: 80vh;
     form {
       position: relative;
       top: 10%;
+
       input {
         background-color: $arapawa;
       }
+
       button {
         color: #fff;
         background-color: $arapawa;
         font-size: 20px;
       }
-      + div {
-        > p {
+
+      +div {
+        >p {
           position: relative;
           color: $arapawa;
           font-size: 30px;
+
           &::after {
             content: "";
             position: absolute;
@@ -104,6 +90,7 @@ onMounted(() => {
             background-color: #9e9e9e;
             z-index: 1;
           }
+
           &::before {
             content: "";
             position: absolute;
@@ -115,6 +102,7 @@ onMounted(() => {
             background-color: #fff;
             z-index: 4;
           }
+
           span {
             display: block;
             text-align: center;

@@ -5,9 +5,7 @@ import { useRouter } from "vue-router";
 import { toLower } from "lodash";
 
 export const useUserStore = defineStore("dashboard-user", () => {
-  const data = ref({
-    socials: {},
-  });
+  const data = ref([]);
   const loading = ref(true);
   const totalPage = ref(1);
   const errors = ref({});
@@ -107,7 +105,7 @@ export const useUserStore = defineStore("dashboard-user", () => {
         emitter.emit("alert", ["success", `Update ${userType} successflly`]);
         router.push({ name: `dashboard-${userType}s` });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   const $reset = () => {

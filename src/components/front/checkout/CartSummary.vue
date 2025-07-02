@@ -1,10 +1,6 @@
 <template>
   <div class="content open-sans pl-4">
-    <div
-      class="box d-flex align-center justify-space-between mb-2"
-      v-for="item in items"
-      :key="item.product_id"
-    >
+    <div class="box d-flex align-center justify-space-between mb-2" v-for="item in items" :key="item.product_id">
       <div class="d-flex align-center gc-3">
         <div class="image">
           <img :src="item.product.image" alt="" />
@@ -21,11 +17,15 @@
         }}</span>
       </div>
     </div>
+    <div class="box d-flex align-center justify-space-between mb-2 drivery-price">
+      <span class="roboto">Drivery Price</span>
+      <span class="open-sans">{{ currencyFormat(driveryPrice) }}</span>
+    </div>
     <v-divider class="mt-6"></v-divider>
     <v-divider class="mb-4"></v-divider>
     <div class="d-flex align-center justify-space-between total roboto">
       <span>Total</span>
-      <span>{{ currencyFormat(total) }}</span>
+      <span>{{ currencyFormat(total + driveryPrice) }}</span>
     </div>
   </div>
 </template>
@@ -41,6 +41,10 @@ defineProps({
     type: Number,
     requried: true,
   },
+  driveryPrice: {
+    type: Number,
+    default: 0,
+  }
 });
 const { currencyFormat } = formats();
 </script>
@@ -48,11 +52,13 @@ const { currencyFormat } = formats();
 <style lang="scss" scoped>
 .content {
   width: 74%;
+
   @media (max-width: 959px) {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
   }
+
   .box {
     .image {
       width: 80px;
@@ -60,11 +66,13 @@ const { currencyFormat } = formats();
       border: 2px solid rgba(128, 128, 128, 0.781);
       border-radius: 4px;
       position: relative;
+
       img {
         width: 100%;
         height: 100%;
         padding: 2px;
       }
+
       .quan {
         position: absolute;
         right: -8px;
@@ -82,23 +90,43 @@ const { currencyFormat } = formats();
         user-select: none;
       }
     }
+
     .name {
       color: $arapawa;
     }
+
     .category {
       font-size: 12px;
       color: rgba(128, 128, 128, 0.795);
     }
+
     .price {
       color: $altamira;
       font-size: 13px;
       font-weight: bold;
     }
   }
+
   .total {
     color: $arapawa;
     font-weight: bold;
     font-size: 20px;
+  }
+
+  .drivery-price {
+    color: $arapawa;
+    margin-top: 16px;
+
+    >span:first-of-type {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    >span:last-of-type {
+      font-size: 14px;
+      font-weight: bolder;
+      color: $altamira;
+    }
   }
 }
 </style>

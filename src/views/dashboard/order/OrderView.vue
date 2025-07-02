@@ -1,32 +1,18 @@
 <template>
   <div class="orders">
     <PageTitle title="Orders" :items />
-    <FilterSection
-      v-if="!loading"
-      v-model:search="filter.search"
-      search-label="Search By Order Number Or Address"
-      :show-button="false"
-    >
-      <template #options
-        ><div
-          class="d-flex flex-column flex-sm-row align-start align-sm-center gr-4 mt-1 mt-md-3"
-        >
+    <FilterSection v-if="!loading" v-model:search="filter.search" search-label="Search By Order Number Or Address"
+      :show-button="false">
+      <template #options>
+        <div class="d-flex flex-column flex-sm-row align-start align-sm-center gr-4 mt-1 mt-md-3">
           <div class="ml-0 ml-md-6">
-            <FilterOption
-              :options="sortOptions"
-              v-model:model-value="filter.sort_by"
-              btn-id="filter_by"
-              btn-label="Sort by"
-            />
+            <FilterOption :options="sortOptions" v-model:model-value="filter.sort_by" btn-id="filter_by"
+              btn-label="Sort by" />
           </div>
           <div class="d-flex align-center">
             <div class="ml-0 ml-sm-6">
-              <FilterOption
-                :options="statusOption"
-                v-model:model-value="filter.status"
-                btn-label="Status"
-                btn-id="status"
-              />
+              <FilterOption :options="statusOption" v-model:model-value="filter.status" btn-label="Status"
+                btn-id="status" />
             </div>
             <SortingButton v-model:sorting-order="filter.sorting_order" />
           </div>
@@ -36,25 +22,14 @@
     <TableData v-if="!loading && orders.length" :orders>
       <template #actions="{ order }">
         <div>
-          <v-icon
-            icon="mdi-eye"
-            style="--color: #4caf50; --background-color: #e5f5e9"
-            class="cursor-pointer main-transition"
-            @click="viewOrder(order.number)"
-          />
+          <v-icon icon="mdi-eye" style="--color: #4caf50; --background-color: #e5f5e9"
+            class="cursor-pointer main-transition" @click="viewOrder(order.number)" />
           <v-tooltip activator="parent" location="top">Show Order</v-tooltip>
         </div>
       </template>
     </TableData>
-    <v-pagination
-      color="#7EB693"
-      v-model="page"
-      @update:model-value="changePage"
-      :length="totalPage"
-      rounded="circle"
-      class="mt-8"
-      v-if="shouldShowPagination"
-    ></v-pagination>
+    <v-pagination color="#7EB693" v-model="page" @update:model-value="changePage" :length="totalPage" rounded="circle"
+      class="mt-8" v-if="shouldShowPagination"></v-pagination>
     <NoDataFound v-if="!loading && orders.length == 0" />
   </div>
 </template>

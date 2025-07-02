@@ -21,10 +21,12 @@ defineProps({
   overflow: hidden;
   background-color: #f1edee;
   height: 380px;
+
   @media (max-width: 959px) {
     height: 350px;
     background-image: unset;
   }
+
   h2 {
     top: 50%;
     left: 50%;
@@ -33,12 +35,22 @@ defineProps({
     color: $arapawa;
     font-weight: 900;
     text-wrap: nowrap;
+
+    @media screen and (max-width: 959px) {
+      font-size: 36px;
+    }
+
+    @media screen and (max-width: 600px) {
+      font-size: 28px;
+    }
   }
+
   span.shep {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
     &:first-of-type {
       &::before {
         content: url("@/assets/images/banner icon/Pattern.png");
@@ -47,6 +59,7 @@ defineProps({
         left: -200px;
       }
     }
+
     &:nth-of-type(2) {
       &::after {
         content: url("@/assets/images/banner icon/Pattern-two.png");
@@ -54,6 +67,7 @@ defineProps({
         bottom: -220px;
         left: 300px;
       }
+
       &::before {
         content: url("@/assets/images/banner icon/Pattern-three.png");
         position: absolute;
@@ -61,6 +75,7 @@ defineProps({
         left: 200px;
       }
     }
+
     &:last-of-type {
       &::after {
         content: url("@/assets/images/banner icon/Pattern-five.png");

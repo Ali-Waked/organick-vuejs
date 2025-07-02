@@ -62,6 +62,10 @@
         <span class="mr-4 roboto">Type</span>
         <span class="open-sans text-capitalize">{{ data.type }}</span>
       </div>
+      <div class="box" v-if="data.billing_address?.notes">
+        <span class="mr-4 roboto">Note</span>
+        <span class="open-sans text-capitalize">{{ data.billing_address.notes }}</span>
+      </div>
       <div class="box" v-if="data.socials">
         <span class="mr-4 roboto">Social Media</span>
         <span class="open-sans">
@@ -72,23 +76,10 @@
         <span class="mr-4 roboto">Actions</span>
         <span class="open-sans">
           <div>
-            <v-btn
-              color="#ff9500"
-              bg-color="#fff3e0"
-              variant="outlined"
-              class="mr-2"
-              append-icon="mdi-pen"
-              @click="editUser(data)"
-              >Edit</v-btn
-            >
-            <v-btn
-              color="#f44336"
-              bg-color="#ffebee"
-              variant="outlined"
-              append-icon="mdi-delete"
-              @click="deleteUser(data.email)"
-              >Delete</v-btn
-            >
+            <v-btn color="#ff9500" bg-color="#fff3e0" variant="outlined" class="mr-2" append-icon="mdi-pen"
+              @click="editUser(data)">Edit</v-btn>
+            <v-btn color="#f44336" bg-color="#ffebee" variant="outlined" append-icon="mdi-delete"
+              @click="deleteUser(data.email)">Delete</v-btn>
           </div>
         </span>
       </div>
@@ -98,13 +89,8 @@
     {{ data }}
   </pre>
   <ShowImage :image-src="imageSrc" v-model:model-value="dialog" />
-  <DeleteAlert
-    :title="alert.title"
-    :text="alert.text"
-    v-model:dialog="alert.dialog"
-    :extra-data="alert.extraData"
-    @delete="deleteUserForever($event)"
-  />
+  <DeleteAlert :title="alert.title" :text="alert.text" v-model:dialog="alert.dialog" :extra-data="alert.extraData"
+    @delete="deleteUserForever($event)" />
 </template>
 
 <script setup>
@@ -160,7 +146,7 @@ const deleteUser = (email) => {
   alert.extraData = email;
   alert.dialog = true;
 };
-const deleteUserForever = () => {};
+const deleteUserForever = () => { };
 const editUser = ({ email, first_name, last_name }) => {
   emitter.emit("showLoading", true);
   router.push({
@@ -226,29 +212,37 @@ onMounted(async () => {
       padding: 4px;
       cursor: pointer;
     }
+
     margin: 8px 0px;
   }
+
   .info {
     border-radius: 8px;
     border: #d4d4d4 1px solid;
     overflow: hidden;
+
     .box {
       padding: 16px 12px;
+
       span {
         display: inline-block;
+
         &.roboto {
           color: $arapawa;
           font-size: 18px;
           font-weight: bold;
           width: 300px;
         }
+
         &.open-sans {
           color: $altamira;
         }
       }
+
       &:nth-of-type(odd) {
         background-color: #fff;
       }
+
       &:nth-of-type(even) {
         background-color: rgb(249, 248, 248);
       }

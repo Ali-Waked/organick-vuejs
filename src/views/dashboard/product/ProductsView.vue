@@ -53,7 +53,7 @@
     <v-pagination
       color="#7EB693"
       v-model="page"
-      @update:model-value="cahngePage"
+      @update:model-value="changePage"
       :length="totalPage"
       rounded="circle"
       class="mt-8"
@@ -148,7 +148,7 @@ const addProduct = () => {
   router.push({ name: "dashboard-add-product" });
 };
 
-const cahngePage = async () => {
+const changePage = async () => {
   // router.push({ path: route.path, query: { page: page.value } });
   await fetchProduct(page.value);
 };

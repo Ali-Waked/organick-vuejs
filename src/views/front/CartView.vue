@@ -31,14 +31,12 @@
       </div> -->
       <div class="d-flex justify-space-between flex-column flex-md-row">
         <div class="contents has-scroll open-sans mt-3" v-if="items.length">
-          <div
-            class="d-flex cart-header align-center justify-space-between mt-8 pr-6 pb-4 roboto mt-4 font-weight-bold"
+          <div class="d-flex cart-header align-center justify-space-between mt-8 pr-6 pb-4 roboto mt-4 font-weight-bold"
             style="
               border-bottom: 1px solid #d4d4d4;
               color: #274c5b;
               font-size: 18px;
-            "
-          >
+            ">
             <span class="d-block w-25 ml-2">Product</span>
             <div class="w-75 d-flex align-center justify-space-between">
               <span class="d-block w-33"></span>
@@ -65,36 +63,23 @@
                 </div>
                 <div class="w-66 d-flex align-center justify-space-between">
                   <p class="price">
-                    <span class="open-sans number"
-                      >${{ item.product.price }}</span
-                    >
+                    <span class="open-sans number">${{ item.product.price }}</span>
                   </p>
                   <p class="quantity position-relative d-flex align-center">
-                    <v-icon
-                      icon="mdi-minus"
-                      class="position-absolute left-0 ml-2"
-                    />
-                    <input
-                      type="number"
-                      min="1"
-                      v-model="item.quantity"
-                      @change="updateQuantity($event, item.id, item.product_id)"
-                      placeholder="Qun"
-                    />
-                    <v-icon
-                      icon="mdi-plus"
-                      class="position-absolute right-0 mr-2"
-                    />
+                    <v-icon icon="mdi-minus" @click="item.quantity > 1 ? item.quantity-- : false"
+                      class="position-absolute left-0 ml-2 control-count" />
+                    <input type="number" min="1" v-model="item.quantity"
+                      @change="updateQuantity($event, item.id, item.product_id)" placeholder="Qun" />
+                    <v-icon icon="mdi-plus" @click="item.quantity++"
+                      class="position-absolute right-0 mr-2 control-count" />
                   </p>
                   <p class="price">
                     <span class="open-sans number">{{
                       currencyFormat(item.product.price * item.quantity)
-                    }}</span>
+                      }}</span>
                   </p>
                   <div class="delete" @click="removeFromCart(item.id)">
-                    <v-icon class="cursor-pointer main-transition"
-                      >mdi-close</v-icon
-                    >
+                    <v-icon class="cursor-pointer main-transition">mdi-close</v-icon>
                   </div>
                 </div>
               </div>
@@ -107,9 +92,7 @@
             Empty Cart</v-tooltip
           > -->
         </div>
-        <div
-          class="bg-grey-lighten-5 position-relative pa-8 pt-0 summary roboto mt-4 mt-md-0"
-        >
+        <div class="bg-grey-lighten-5 position-relative pa-8 pt-0 summary roboto mt-4 mt-md-0">
           <h3 class="mt-10">SUMMARY</h3>
           <div class="mb-2 mt-10 d-flex align-center justify-space-between">
             <span>Number Of Items:</span>
@@ -122,20 +105,10 @@
           </div>
           <v-divider />
           <div class="action bottom-0 right-0 left-0 pa-8">
-            <v-btn
-              class="w-100 rounded-pill text-none elevation-0 mb-4"
-              height="44"
-              @click="router.push({ name: 'checkout' })"
-              v-if="items.length"
-              >Check Out</v-btn
-            >
-            <v-btn
-              class="w-100 rounded-pill text-none"
-              variant="outlined"
-              height="44"
-              @click="showLoading"
-              >Continue Shopping</v-btn
-            >
+            <v-btn class="w-100 rounded-pill text-none elevation-0 mb-4" height="44"
+              @click="router.push({ name: 'checkout' })" v-if="items.length">Check Out</v-btn>
+            <v-btn class="w-100 rounded-pill text-none" variant="outlined" height="44" @click="showLoading">Continue
+              Shopping</v-btn>
           </div>
         </div>
       </div>
@@ -180,65 +153,80 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .cart-view {
   .header {
     h3 {
       font-size: 32px;
       font-weight: bold;
       color: $arapawa;
-      + i {
+
+      +i {
         font-size: 20px;
         color: $altamira;
+
         &:hover {
           color: $arapawa;
         }
       }
     }
+
     div.open-sans {
       span {
         color: $arapawa;
       }
+
       span.number {
         color: $green-sheen;
       }
     }
   }
+
   .cart-header {
     min-width: 620px;
   }
+
   .contents {
     margin-top: 24px;
     height: 74vh;
     width: 75%;
+
     @media (max-width: 959px) {
       width: 100%;
       height: unset;
     }
+
     // background-color:;
     .box:first-of-type {
       background-color: red;
     }
+
     .box {
       min-width: 620px;
+
       .image {
         img {
           width: 50%;
         }
       }
+
       .info {
         font-size: 15px;
+
         .name,
         .category {
           color: $altamira;
         }
+
         .price {
           font-size: 17px;
           color: $altamira;
+
           span.number {
             color: $green-sheen;
           }
         }
+
         .quantity {
           input {
             padding: 12px 10px 12px 20px;
@@ -252,49 +240,65 @@ onMounted(async () => {
             color: $altamira;
           }
         }
+
         i {
           font-size: 18px;
           color: $light-gray;
+
           &:hover {
             color: $altamira;
           }
         }
       }
+
       &:not(:last-of-type) {
         border-bottom: 1px solid $light-gray;
         padding-bottom: 12px;
       }
     }
   }
+
   .summary {
     color: $arapawa;
     width: 25%;
+
     .open-sans {
       color: $green-sheen;
     }
+
     @media (max-width: 959px) {
       width: 80%;
       margin-left: auto;
       margin-right: auto;
     }
+
     @media (max-width: 559px) {
       width: 100%;
     }
+
     .action {
       position: absolute;
+
       @media (max-width: 959px) {
         position: relative;
       }
     }
   }
+
   .action {
     button {
       color: $arapawa;
+
       &:first-of-type {
         color: #fff;
         background-color: $arapawa;
       }
     }
+  }
+
+  .control-count {
+    background-color: #fff;
+    height: calc(100% - 10px);
   }
 }
 </style>

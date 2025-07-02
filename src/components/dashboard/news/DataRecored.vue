@@ -1,42 +1,30 @@
 <template>
   <v-hover v-slot="{ isHovering, props }">
-    <v-card
-      class="card cursor-pointer mx-auto pb-4 open-sans"
-      min-width="280px"
-      max-width="420px"
-      v-bind="props"
-      :elevation="isHovering ? 5 : 2"
-    >
-      <v-img
-        class="align-end text-white position-relative"
-        height="200"
-        :src="blog.image"
-        cover
-      >
-        <v-card-title class="text-capitalize roboto">{{
-          blog.title
-        }}</v-card-title>
-        <span
-          class="position-absolute d-flex flex-column align-center justify-center views"
-        >
-          <span class="num">{{ blog.number_of_views }}</span>
+    <v-card class="card cursor-pointer mx-auto pb-4 open-sans" min-width="280px" max-width="420px" v-bind="props"
+      :elevation="isHovering ? 5 : 2">
+      <v-img class="align-end text-white position-relative" height="200" :src="news.image" cover>
+        <v-card-title class="text-capitalize roboto" style="background-color: #00000061;">{{
+          news.title
+          }}</v-card-title>
+        <span class="position-absolute d-flex flex-column align-center justify-center views">
+          <span class="num">{{ news.number_of_views }}</span>
           <v-icon icon="mdi-eye" />
         </span>
       </v-img>
       <v-card-subtitle class="mt-2 roboto" lines="3">{{
-        blog.subtitle
-      }}</v-card-subtitle>
+        news.subtitle
+        }}</v-card-subtitle>
       <v-card-text class="py-2">
-        <span class="text-color font-weight-bold">Created By:</span>
-        <span class="text-color ml-2">{{ blog.auther }}</span>
+        <span class="text-color font-weight-bold">Type:</span>
+        <span class="text-color ml-2">{{ news.type }}</span>
       </v-card-text>
       <v-card-text class="py-2">
         <span class="text-color font-weight-bold">Pablished at:</span>
-        <span class="text-color ml-2">{{ dateFormat(blog.created_at) }}</span>
+        <span class="text-color ml-2">{{ dateFormat(news.created_at) }}</span>
       </v-card-text>
       <v-card-text class="py-2">
         <span class="text-color font-weight-bold">Last Modified:</span>
-        <span class="text-color ml-2">{{ dateFormat(blog.updated_at) }}</span>
+        <span class="text-color ml-2">{{ dateFormat(news.updated_at) }}</span>
       </v-card-text>
       <v-card-actions class="ml-2 flex-wrap">
         <slot name="actions" />
@@ -52,10 +40,14 @@ import formats from "@/mixins/formats";
 const { dateFormat } = formats();
 
 defineProps({
-  blog: {
+  news: {
     type: Object,
   },
 });
+
+// const fullname = computed(() => {
+//   return `${news.user.first_name} ${news.user.last_name}`;
+// });
 </script>
 
 <style lang="scss" scoped>
@@ -63,14 +55,16 @@ defineProps({
   color: $arapawa;
   // font-size: 16px;
 }
+
 .views {
   top: 0;
   right: 0px;
   width: 52px;
   height: 52px;
-  background: #ffffffdb;
+  background: #ffffffa8;
   color: $arapawa;
   font-size: 12px;
+
   .num {
     font-size: 16px;
     font-weight: bold;

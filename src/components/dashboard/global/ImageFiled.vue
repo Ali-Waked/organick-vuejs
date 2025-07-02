@@ -1,23 +1,12 @@
 <template>
   <div class="position-relative">
     <div class="file" ref="fileContainer">
-      <label
-        :for="id"
-        :class="[
-          'main-transition',
-          hasError ? 'error' : '',
-          loading ? 'cursor-progress event-none' : '',
-        ]"
-        @dragleave="dragLeave"
-        @dragover.prevent="dragOver"
-        @drop.prevent="onDrop"
-        tabindex="0"
-        v-if="!imageSrc"
-      >
-        <div
-          class="d-flex align-center justify-center flex-column"
-          v-if="!loading"
-        >
+      <label :for="id" :class="[
+        'main-transition',
+        hasError ? 'error' : '',
+        loading ? 'cursor-progress event-none' : '',
+      ]" @dragleave="dragLeave" @dragover.prevent="dragOver" @drop.prevent="onDrop" tabindex="0" v-if="!imageSrc">
+        <div class="d-flex align-center justify-center flex-column" v-if="!loading">
           <v-icon icon="mdi-cloud-upload" />
           <span class="open-sans">{{ label }}</span>
         </div>
@@ -170,12 +159,14 @@ const removeImage = () => {
 </script>
 
 <style lang="scss">
-img {
+.image img {
   max-height: 400px;
   max-width: 350px;
 }
+
 .file {
   height: 200px;
+
   label {
     width: 100%;
     padding: 16px;
@@ -186,9 +177,11 @@ img {
     border-radius: 8px;
     margin-bottom: 16px;
     opacity: 0.7;
+
     &:hover {
       opacity: 1;
     }
+
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -196,28 +189,34 @@ img {
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
+
     i {
       color: currentColor;
       font-size: 70px;
     }
+
     span {
       color: currentColor;
       font-size: 22px;
       font-weight: bold;
     }
+
     &.error {
       color: #b00020;
     }
   }
+
   .image {
     height: 180px;
     // display: none;
     width: fit-content;
     position: relative;
+
     img {
       height: 100%;
       border-radius: 6px;
     }
+
     i {
       background: #333;
       border-radius: 50%;
@@ -231,6 +230,7 @@ img {
       transition: 0.5s;
     }
   }
+
   input[type="file"] {
     display: none;
   }

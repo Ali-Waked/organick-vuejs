@@ -1,18 +1,10 @@
 <template>
   <div class="drawer">
-    <v-navigation-drawer
-      :rail
-      expand-on-hover
-      class="main-transition"
-      color="grey-lighten-4"
-      v-model="drawer"
-    >
+    <v-navigation-drawer :rail expand-on-hover class="main-transition" color="grey-lighten-4" v-model="drawer">
       <v-list class="pt-4">
         <v-list-item class="pa-0 pl-3">
-          <div
-            class="logo d-flex align-center gc-1 cursor-pointer"
-            @click="showLoading, router.push({ name: 'dashboard' })"
-          >
+          <div class="logo d-flex align-center gc-1 cursor-pointer"
+            @click="showLoading, router.push({ name: 'dashboard' })">
             <AppLogo width="32" height="40" class="mr-2" />
             <span class="roboto">Organick</span>
           </div>
@@ -21,12 +13,8 @@
 
         <v-list-item-group>
           <template v-for="item in navItems" :key="item.name">
-            <v-list-item
-              class="pa-0 pl-3 mt-3 py-3"
-              :to="{ name: item.name }"
-              active-color="grey"
-              active-class="active-link"
-            >
+            <v-list-item class="pa-0 pl-3 mt-3 py-3" :to="{ name: item.name }" active-color="grey"
+              active-class="active-link">
               <div class="link">
                 <v-icon :icon="item.icon" />
                 <span class="roboto">{{ item.label }}</span>
@@ -50,60 +38,70 @@ const rail = ref(true);
 const emitter = inject("emitter");
 
 const navItems = [
-  { name: "dashboard", label: "Home", icon: "mdi-home" },
-  { name: "dashboard-categories", label: "Categories", icon: "mdi-sitemap" },
-  { name: "dashboard-products", label: "Products", icon: "mdi-food-apple" },
-  // { name: "dashboard-projects", label: "Projects", icon: "mdi-file-check" },
-  { name: "dashboard-blogs", label: "News", icon: "mdi-newspaper" },
+  {
+    name: "dashboard",
+    label: "Home",
+    icon: "mdi-view-dashboard-outline", // more dashboard-specific
+  },
+  {
+    name: "dashboard-categories",
+    label: "Categories",
+    icon: "mdi-shape-outline", // more category-related
+  },
+  {
+    name: "dashboard-products",
+    label: "Products",
+    icon: "mdi-package-variant", // better for products
+  },
+  {
+    name: "dashboard-news",
+    label: "News",
+    icon: "mdi-newspaper-variant-outline", // more distinct news icon
+  },
   {
     name: "dashboard-orders",
     label: "Orders",
-    icon: "mdi-clipboard-arrow-down",
+    icon: "mdi-cart-outline", // better suited than clipboard
   },
   // {
-  //   name: "dashboard-messages",
-  //   label: "Messages",
-  //   icon: "mdi-comment-account",
+  //   name: "dashboard-chat",
+  //   label: "Chat",
+  //   icon: "mdi-chat-outline", // cleaner chat icon
   // },
-  // {
-  //   name: "dashboard-team",
-  //   label: "Team Member",
-  //   icon: "mdi-account-multiple",
-  // },
-  // {
-  //   name: "dashboard-users",
-  //   label: "Team Suppoted",
-  //   icon: "mdi-account-multiple",
-  // },
-  // { name: "dashboard-services", label: "Services", icon: "mdi-puzzle" },
-  { name: "dashboard-roles", label: "Chat", icon: "mdi-wechat" },
   {
     name: "dashboard-drivers",
     label: "Drivers",
-    icon: "mdi-account-multiple-outline",
+    icon: "mdi-steering", // steering wheel icon
   },
   {
     name: "dashboard-customers",
     label: "Customers",
-    icon: "mdi-account-multiple",
+    icon: "mdi-account-group-outline", // better for customer groups
   },
   {
     name: "dashboard-moderators",
     label: "Moderators",
-    icon: "mdi-account-multiple-outline",
+    icon: "mdi-shield-account-outline", // signifies roles/authority
   },
-  // { name: "dashboard-roles", label: "Roles", icon: "mdi-account-key" },
-  { name: "dashboard-cities", label: "Cities", icon: "mdi-city" },
+  {
+    name: "dashboard-cities",
+    label: "Cities",
+    icon: "mdi-city-variant-outline", // clearer city representation
+  },
   {
     name: "dashboard-payment-methods",
     label: "Payment Methods",
-    icon: "mdi-cash",
+    icon: "mdi-credit-card-outline", // more specific for payments
   },
-  { name: "dashboard-roles", label: "Profile", icon: "mdi-account" },
+  // {
+  //   name: "dashboard-profile",
+  //   label: "Profile",
+  //   icon: "mdi-account-circle-outline", // clearer profile icon
+  // },
   {
     name: "dashboard-reports",
     label: "Report",
-    icon: "mdi-chart-bar",
+    icon: "mdi-file-chart-outline", // clean report/chart look
   },
 ];
 
@@ -132,25 +130,31 @@ onMounted(() => {
 <style lang="scss">
 .v-navigation-drawer {
   ::-webkit-scrollbar {
-    width: 0px; /* Adjust the width as needed */
+    width: 0px;
+    /* Adjust the width as needed */
   }
+
   .logo {
     width: fit-content;
+
     span {
       font-size: 26px;
       font-weight: bold;
       color: $arapawa;
     }
   }
+
   .link {
     display: flex;
     align-items: center;
     text-wrap: nowrap;
     column-gap: 16px;
+
     i {
       font-size: 32px;
       color: $green-sheen;
     }
+
     span {
       color: $altamira;
       font-weight: 500;

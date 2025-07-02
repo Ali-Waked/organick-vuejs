@@ -4,21 +4,10 @@
     <DashboardNav />
 
     <v-main class="content pt-2 mb-8 position-relative">
-      <ActionAlert
-        :icon="alert.icon"
-        :background-color="alert.backgroundColor"
-        :message="alert.message"
-        :class="alertClass"
-      />
-      <v-progress-linear
-        indeterminate
-        size="100"
-        bg-color="#525C60"
-        width="30"
-        color="#525C60"
-        class="position-absolute top-0 left-0"
-        v-if="isLoading"
-      ></v-progress-linear>
+      <ActionAlert :icon="alert.icon" :background-color="alert.backgroundColor" :message="alert.message"
+        :class="alertClass" />
+      <v-progress-linear indeterminate size="100" bg-color="#525C60" width="30" color="#525C60"
+        class="position-absolute top-0 left-0" v-if="isLoading"></v-progress-linear>
       <v-container>
         <slot />
       </v-container>
@@ -52,10 +41,10 @@ onMounted(() => {
       type === "error"
         ? "red"
         : type === "info"
-        ? "blue"
-        : type === "worning"
-        ? "orange"
-        : "green";
+          ? "blue"
+          : type === "worning"
+            ? "orange"
+            : "green";
     alert.message = message;
     alert.icon = icon;
     alertClass.active = true;
