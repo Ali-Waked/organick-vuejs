@@ -12,19 +12,19 @@
 defineProps({
   icon: {
     type: String,
-    required: true,
+    // required: true,
   },
   number: {
     type: Number,
-    required: true,
+    // required: true,
   },
   title: {
     type: String,
-    required: true,
+    // required: true,
   },
   theam: {
     type: String,
-    required: true,
+    // required: true,
   },
 });
 </script>
@@ -39,12 +39,15 @@ defineProps({
   // justify-content: center;
   // border-bottom: 2px solid black;
   padding: 12px;
+
   i {
     font-size: 64px;
   }
+
   span.number {
     font-size: 46px;
   }
+
   p {
     font-size: 18px;
     font-weight: bold;

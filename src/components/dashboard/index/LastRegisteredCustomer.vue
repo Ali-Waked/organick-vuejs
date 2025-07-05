@@ -100,7 +100,9 @@ onMounted(() => {
 .customer-info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  font-size: 14px;
+  flex: 1;
 }
 
 .info-row {

@@ -4,8 +4,8 @@
       <PageTitle>
       </PageTitle>
     </div>
-    <v-row class="mt-1" justify="center" v-if="false">
-      <v-col cols="10" sm="6" md="4" lg="3" v-for="card in cards">
+    <v-row class="mt-1" justify="center">
+      <v-col cols="10" sm="6" md="4" lg="3" v-for="card in cards" :key="card.icon">
         <CardNumber :icon="card.icon" :title="card.title" :number="card.number" :theam="card.theam" />
       </v-col>
     </v-row>
@@ -18,13 +18,82 @@
       <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
     </div>
   </div> -->
-  <v-card>
-    <v-card-title class="text-h6 font-weight-bold d-block pl-4 py-4">Last Registration Customer</v-card-title>
-    <template v-for="customer in data.last_customers_registered" :key="customer.id">
-      <LastRegisteredCustomer :first-name="customer.first_name" :last-name="customer.last_name" :email="customer.email"
-        :date="customer.created_at" :image="customer.avatar" />
-    </template>
-  </v-card>
+  <v-row>
+    <v-col cols="12" md="7" lg="5" class="last-customer">
+      <v-hover v-slot="{ isHovering, props }">
+        <v-card v-bind="props"
+          :class="['last-customer-card has-scroll', isHovering ? 'overflow-y-auto' : 'overflow-hidden']">
+          <v-card-title class="d-flex justify-space-between align-center" style="background-color: rgb(0 0 0 / 17%)">
+            <span class="text-h6 font-weight-bold d-inline-block ml-4 py-3">Last Registration Customer</span>
+            <span class="see-more  d-flex align-center">
+              <span>See More</span>
+              <v-icon icon="mdi-chevron-double-right" size="14px"></v-icon>
+            </span>
+          </v-card-title>
+          <template v-for="customer in data.last_customers_registered" :key="customer.id">
+            <LastRegisteredCustomer :first-name="customer.first_name" :last-name="customer.last_name"
+              :email="customer.email" :date="customer.created_at" :image="customer.avatar" />
+          </template>
+        </v-card>
+      </v-hover>
+    </v-col>
+    <v-col cols="12" md="10" lg="7" class="order-city-char" v-if="chartData.labels.length > 0">
+      <Bar :data="chartData" :options="chartOptions" />
+    </v-col>
+  </v-row>
+
+  <v-row>
+    <v-col cols="12" md="10" lg="5" class="order-city-char" v-if="chartData.labels.length > 0">
+      <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
+    </v-col>
+    <v-col cols="12" md="7" lg="7" class="last-customer">
+      <v-hover v-slot="{ isHovering, props }">
+        <v-card v-bind="props"
+          :class="['last-customer-card has-scroll', isHovering ? 'overflow-y-auto' : 'overflow-hidden']">
+          <v-card-title class="d-flex justify-space-between align-center" style="background-color: rgb(0 0 0 / 17%)">
+            <span class="text-h6 font-weight-bold d-inline-block ml-4 py-3">Last Orders Income</span>
+            <span class="see-more  d-flex align-center">
+              <span>See More</span>
+              <v-icon icon="mdi-chevron-double-right" size="14px"></v-icon>
+            </span>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col cols="12">
+                <v-row class="font-weight-bold text-uppercase mt-1" style="color: #274C5B">
+                  <v-col cols="2">#No.</v-col>
+                  <v-col cols="5">Email</v-col>
+                  <v-col cols="3">Status</v-col>
+                  <v-col cols="2" class="text-center">Action</v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="12" class="text-grey-lighten-4">
+                <v-row v-for="order in data.last_order_incoming" :key="order.id">
+                  <v-col cols="2">#{{ order.number }}</v-col>
+                  <v-col cols="5">{{ order.customer.email }}</v-col>
+                  <v-col cols="3">{{ order.status }}</v-col>
+                  <v-col cols="2" class="position-relative">
+                    <v-hover v-slot="{ isHovering, props }">
+                      <span v-bind="props"
+                        :class="['main-transition d-inline-block pa-2 rounded-circle position-absolute', isHovering ? 'bg-green-lighten-5' : '']"
+                        style="left: 50%;top:50%;transform: translate(-50%,-50%)">
+                        <v-icon icon="mdi-eye" color="green" class="cursor-pointer" />
+                      </span>
+                    </v-hover>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <pre>
+
+          {{ data.last_order_incoming }}
+        </pre>
+        </v-card>
+      </v-hover>
+    </v-col>
+
+  </v-row>
   <!-- <div class="flex-0-1">
     <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
   </div> -->
@@ -50,6 +119,7 @@ import {
   PointElement,
 } from "chart.js";
 import axiosClient from '../../axiosClient';
+import { Bar } from 'vue-chartjs';
 
 // ChartJS.register(
 //   Title,
@@ -74,21 +144,39 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
-  components: { Line, PageTitle, CardNumber },
+  components: {
+    Line, PageTitle, CardNumber, LastRegisteredCustomer,
+    Bar,
+  },
   data() {
     return {
+      // chartData: {
+      //   labels: ["January", "February", "March"],
+      //   datasets: [{ data: [40, 20, 12] }],
+      // },
+      // chartOptions: {
+      //   responsive: true,
+      // },
+      data: {},
+
       chartData: {
-        labels: ["January", "February", "March"],
-        datasets: [{ data: [40, 20, 12] }],
+        labels: [],
+        datasets: [
+          {
+            label: 'Orders by City',
+            backgroundColor: '#7EB693',
+            data: [],
+          },
+        ],
       },
       chartOptions: {
         responsive: true,
-      },
-      data: {},
+        plugins: {
+          legend: { display: true },
+        },
+      }
+
     };
-  },
-  components: {
-    LastRegisteredCustomer,
   },
   computed: {
     cards() {
@@ -220,7 +308,12 @@ export default {
 
   },
   mounted() {
-    axiosClient.get('/dashboard').then(response => this.data = response.data).catch(error => {
+    axiosClient.get('/dashboard').then(response => {
+      this.data = response.data;
+      const data = response.data.order_depended_city;
+      this.chartData.labels = data.map(item => item.city);
+      this.chartData.datasets[0].data = data.map(item => item.total);
+    }).catch(error => {
       console.error("Error fetching dashboard data:", error);
     });
   }
@@ -267,5 +360,53 @@ export default {
 
 .text-h6 {
   color: $arapawa;
+
+  &span {
+    +i {
+      // color: $arapawa;
+      font-size: 20px;
+    }
+  }
+}
+
+.last-customer {
+  align-self: end;
+
+  +.order-city-char {
+    align-self: end;
+  }
+
+  .last-customer-card {
+    height: 326px;
+    overflow-y: auto;
+  }
+}
+
+span.see-more {
+  color: #616161;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.5s;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: blue;
+    transition: 0.5s;
+  }
+
+  &:hover {
+    color: blue;
+
+    &::after {
+      // width: 100%;
+      width: calc(100% - 10px);
+    }
+  }
 }
 </style>
