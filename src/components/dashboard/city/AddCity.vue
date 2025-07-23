@@ -1,49 +1,19 @@
 <template>
   <v-dialog v-model="dialog" transition="dialog-top-transition">
-    <v-card
-      min-width="350"
-      max-width="40%"
-      class="mx-auto text-center pt-8 pb-4 px-4"
-    >
+    <v-card min-width="350" max-width="40%" class="mx-auto text-center pt-8 pb-4 px-4">
       <v-card-title class="roboto text-h4 text-grey-darken-3">{{
         option.title
-      }}</v-card-title>
+        }}</v-card-title>
       <v-card-text>
-        <v-text-field
-          variant="outlined"
-          type="text"
-          required
-          label="City Name"
-          :error-messages="errors.name"
-          v-model="city.name"
-          class="text-left"
-          color="#525C60"
-        ></v-text-field>
-        <v-text-field
-          variant="outlined"
-          type="number"
-          required
-          label="Dirvery Price"
-          :error-messages="errors.driver_price"
-          v-model="city.driver_price"
-          color="#525C60"
-          class="text-left"
-        ></v-text-field>
+        <v-text-field variant="outlined" type="text" required label="City Name" :error-messages="errors.name"
+          v-model="city.name" class="text-left" color="#525C60"></v-text-field>
+        <v-text-field variant="outlined" type="number" required label="Dirvery Price"
+          :error-messages="errors.driver_price" v-model="city.driver_price" color="#525C60"
+          class="text-left"></v-text-field>
       </v-card-text>
       <v-card-actions class="pt-4">
-        <v-btn
-          @click="submit"
-          variant="tonal"
-          :loading
-          :color="option.btnColor"
-          >{{ option.btnLabel }}</v-btn
-        >
-        <v-btn
-          @click="$emit('update:dialog', false)"
-          variant="tonal"
-          color="grey"
-          >cancel</v-btn
-        >
+        <v-btn @click="submit" variant="tonal" :loading :color="option.btnColor">{{ option.btnLabel }}</v-btn>
+        <v-btn @click="$emit('update:dialog', false)" variant="tonal" color="grey">cancel</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

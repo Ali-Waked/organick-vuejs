@@ -51,7 +51,8 @@ export const useProductStore = defineStore("product-front", () => {
         loading.value = false;
       })
       .catch((e) => {
-        router.push({ name: "page-not-found" });
+        // router.push({ name: "page-not-found" });
+        console.error(e);
         // console.error("error", e);
       });
   };

@@ -1,8 +1,9 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="portfolio-details position-relative">
-    <!-- <img src="@" alt="image" /> -->
-    <div class="image"></div>
+    <div class="image">
+      <img :src="news.image" alt="Single News Image" class="w-100 h-100" />
+    </div>
     <v-container>
       <div class="details elevation-12 rounded-xl d-flex flex-column justify-center bg-white">
         <ul class="d-flex px-14 roboto gc-6 flex-column flex-sm-row gr-1 gr-sm-0 align-start align-sm-center pt-10">
@@ -82,7 +83,14 @@
     </v-container>
   </div>
 </template>
-<script setup></script>
+<script setup>
+const props = defineProps({
+  news: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
 
 <style lang="scss">
 .portfolio-details {

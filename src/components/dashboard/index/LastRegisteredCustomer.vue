@@ -73,6 +73,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   position: relative;
+  // font-size: 10px !important;
 
   &:not(:last-of-type) {
 

@@ -61,11 +61,11 @@ import { inject, onMounted, onUnmounted } from "vue";
 //   },
 // };
 
-const Echo = inject("Echo");
-const categoryCreated = Echo.private("category.created");
-categoryCreated.listen(".category.created", (data) => {
-  console.log("EventOne received:", data);
-});
+// const Echo = inject("Echo");
+// const categoryCreated = Echo.private("category.created");
+// categoryCreated.listen(".category.created", (data) => {
+//   console.log("EventOne received:", data);
+// });
 onMounted(() => {
   // axiosClient.get("/dashboard").then((respones) => {
   //   console.log(respones);

@@ -16,7 +16,7 @@
               ">
               {{ product.category?.name }}
             </v-chip>
-            <div class="icons position-absolute ">
+            <div class="icons position-absolute " v-if="authStore.isCustomer()">
               <v-icon icon="mdi-heart" color="red-darken-2" :class="[product.isFavorite ? 'heart-icon' : '']"
                 @click="removeFormFavorite(product.id)" />
               <v-icon icon="mdi-heart-outline" color="red-darken-2" :class="[!product.isFavorite ? 'heart-icon' : '']"
@@ -28,17 +28,17 @@
           <div class="content">
             <h3 class="product-name roboto">{{ product.name }}</h3>
             <v-rating color="#FFA858" length="5" half-increments style="pointer-events: none; font-size: 11px"
-              size="15px" model-value="4"></v-rating>
+              size="15px" :model-value="product.averageRating"></v-rating>
             <div class="price open-sans">
               <span class="old-price text-decoration-line-through">{{
-                product.price
+                currencyFormat(product.price)
                 }}</span>
-              <span class="new-price">${{ product.price }}</span>
+              <span class="new-price">{{ currencyFormat(product.price) }}</span>
             </div>
             <p class="description open-sans">
               {{ product.description }}
             </p>
-            <div class="add-to-cart roboto d-flex align-center ga-4">
+            <div class="add-to-cart roboto d-flex align-center ga-4" v-if="authStore.isCustomer()">
               <div class="d-flex align-center ga-4">
                 <span>Quantity :</span>
                 <input type="number" min="1" v-model="item.quantity" />
@@ -51,27 +51,8 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="10" class="text-center">
+        <v-col cols="12" lg="10" class="text-center">
           <div class="actions d-flex ga-3 justify-center">
-            <!-- <v-btn
-              :variant="showDescription ? 'flat' : 'tonal'"
-              class="text-none roboto font-weight-bold"
-              width="290"
-              height="64"
-              color="#274C5B"
-              @click="changeInfo(ProductDescription)"
-              >Product Description
-            </v-btn>
-            <v-btn
-              :variant="showDescription ? 'tonal' : 'flat'"
-              class="text-none roboto font-weight-bold"
-              width="290"
-              height="64"
-              color="#274C5B"
-              @click="changeInfo(ProductAddionalInfo)"
-              >Additional Info
-            </v-btn>
-            <component :is="componentShow" /> -->
             <v-btn v-for="(button, index) in buttons" :key="index" :variant="componentShow.__name === button.component.__name
               ? 'flat'
               : 'tonal'
@@ -80,7 +61,7 @@
               {{ button.label }}
             </v-btn>
           </div>
-          <component :is="componentShow" />
+          <component :is="componentShow" :product="product" />
         </v-col>
       </v-row>
     </v-container>
@@ -95,6 +76,13 @@ import { storeToRefs } from "pinia";
 import ProductDescription from "./ProductDescription.vue";
 import ProductAddionalInfo from "./ProductAddionalInfo.vue";
 import { useFavoriteStore } from "@/stores/front/favorite";
+import { useAuthStore } from "@/stores/auth/auth";
+import formats from "@/mixins/formats";
+
+const { dateFormat, currencyFormat } = formats();
+
+const authStore = useAuthStore();
+// const { isAuth } = storeToRefs(authStore);
 const props = defineProps({
   product: {
     default: {},

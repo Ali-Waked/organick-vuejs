@@ -88,10 +88,10 @@ const submitNews = async () => {
     await newsStore.addNews(formData);
   } else {
     formData.append("_method", "PUT");
-    formData.delete("image");
-    if (imageSrc.value !== "") {
-      formData.append("image_file", imageSrc.value);
-    }
+    // formData.delete("image");
+    // if (imageSrc.value !== "") {
+    //   formData.append("image", imageSrc.value);
+    // }
     await newsStore.updateNews(formData, news.value.slug);
   }
   emitter.emit("showLoading", false);

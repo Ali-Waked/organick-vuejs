@@ -13,6 +13,16 @@ export const useAuthStore = defineStore("auth", {
     redirect: false,
     isAuth: false,
   }),
+  getters: {
+    isAdmin: (state) => state.user && state.user.type === 'admin',
+    isDriver: (state) => state.user && state.user.type === 'driver',
+    isModerator: (state) => state.user && state.user.type === 'moderator',
+    isCustomer: (state) => state.user && state.user.type === 'customer',
+    isAuthenticated: (state) => state.isAuth,
+    getUser: (state) => state.user,
+    getErrors: (state) => state.errors,
+    isLoading: (state) => state.loading,
+  },
   actions: {
     async login(credentials) {
       this.loading = true;
@@ -81,8 +91,20 @@ export const useAuthStore = defineStore("auth", {
         .get("http://localhost/sanctum/csrf-cookie", {
           withCredentials: true,
         })
-        .then((response) => {});
+        .then((response) => { });
     },
+    // isAdmin() {
+    //   return this.isAuth && this.user.type == 'admin'
+    // },
+    // isDriver() {
+    //   return this.isAuth && this.user.type == 'driver'
+    // },
+    // isModerator() {
+    //   return this.isAuth && this.user.type == 'moderator'
+    // },
+    // isCustomer() {
+    //   return this.isAuth && this.user.type == 'customer'
+    // },
     // isAuth() {
     //   return localStorage.getItem("isAuth") ? true : false;
     // },

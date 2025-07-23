@@ -1,5 +1,8 @@
 const useFormats = () => {
-  const currencyFormat = (amount, locale = "en-US", currency = "USD") => {
+  const currencyFormat = (amount, type = "fixed", locale = "en-US", currency = "USD") => {
+    if (type === "percentage") {
+      return `${amount}%`;
+    }
     return new Intl.NumberFormat(locale, {
       style: "currency",
       currency: currency,
@@ -13,6 +16,16 @@ const useFormats = () => {
       year: "numeric",
       month: "long",
       day: "2-digit",
+      ...options,
+    };
+    return new Intl.DateTimeFormat(locale, defaultOptions).format(new Date(date));
+  };
+  const dateFormatForNews = (date, locale = "en-US", options = {}) => {
+    if (!date) return "";
+    const defaultOptions = {
+      // year: "numeric",
+      day: "2-digit",
+      month: "short",
       ...options,
     };
     return new Intl.DateTimeFormat(locale, defaultOptions).format(new Date(date));
@@ -39,7 +52,7 @@ const useFormats = () => {
   }
 
 
-  return { currencyFormat, dateFormat, capitalizeFirstLetter, getSingularName };
+  return { currencyFormat, dateFormat, capitalizeFirstLetter, getSingularName, dateFormatForNews };
 }
 
 export default useFormats;

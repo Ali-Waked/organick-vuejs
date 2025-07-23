@@ -1,10 +1,18 @@
 <template>
   <div class="drawer">
-    <v-navigation-drawer :rail expand-on-hover class="main-transition" color="grey-lighten-4" v-model="drawer">
+    <v-navigation-drawer
+      :rail
+      expand-on-hover
+      class="main-transition"
+      color="grey-lighten-4"
+      v-model="drawer"
+    >
       <v-list class="pt-4">
         <v-list-item class="pa-0 pl-3">
-          <div class="logo d-flex align-center gc-1 cursor-pointer"
-            @click="showLoading, router.push({ name: 'dashboard' })">
+          <div
+            class="logo d-flex align-center gc-1 cursor-pointer"
+            @click="showLoading, router.push({ name: 'dashboard' })"
+          >
             <AppLogo width="32" height="40" class="mr-2" />
             <span class="roboto">Organick</span>
           </div>
@@ -13,8 +21,12 @@
 
         <v-list-item-group>
           <template v-for="item in navItems" :key="item.name">
-            <v-list-item class="pa-0 pl-3 mt-3 py-3" :to="{ name: item.name }" active-color="grey"
-              active-class="active-link">
+            <v-list-item
+              class="pa-0 pl-3 mt-3 py-3"
+              :to="{ name: item.name }"
+              active-color="grey"
+              active-class="active-link"
+            >
               <div class="link">
                 <v-icon :icon="item.icon" />
                 <span class="roboto">{{ item.label }}</span>
@@ -63,11 +75,11 @@ const navItems = [
     label: "Orders",
     icon: "mdi-cart-outline", // better suited than clipboard
   },
-  // {
-  //   name: "dashboard-chat",
-  //   label: "Chat",
-  //   icon: "mdi-chat-outline", // cleaner chat icon
-  // },
+  {
+    name: "dashboard-chat",
+    label: "Chat",
+    icon: "mdi-chat-outline", // cleaner chat icon
+  },
   {
     name: "dashboard-drivers",
     label: "Drivers",
@@ -84,6 +96,11 @@ const navItems = [
     icon: "mdi-shield-account-outline", // signifies roles/authority
   },
   {
+    name: "dashboard-discount",
+    label: "Discount",
+    icon: "mdi-tag-outline", // sale
+  },
+  {
     name: "dashboard-cities",
     label: "Cities",
     icon: "mdi-city-variant-outline", // clearer city representation
@@ -98,6 +115,11 @@ const navItems = [
   //   label: "Profile",
   //   icon: "mdi-account-circle-outline", // clearer profile icon
   // },
+  {
+    name: "dashboard-customer-feedbacks",
+    label: "Customer Feedbacks",
+    icon: "mdi-message-text-outline", // clean report/chart look
+  },
   {
     name: "dashboard-reports",
     label: "Report",

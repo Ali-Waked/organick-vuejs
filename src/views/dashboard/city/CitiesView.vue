@@ -5,11 +5,11 @@
       btn-label="Add New City" />
     <TableData :data="cities" v-if="cities.length">
       <template #actions="{ item }">
-        <ActionButtons @delete="deleteRole(item)" @edit="editCity(item.id)" :tooltip />
+        <ActionButtons @delete="deleteCity(item)" @edit="editCity(item.id)" :tooltip />
       </template>
     </TableData>
     <DeleteAlert :title="alert.title" :text="alert.text" v-model:dialog="alert.dialog" :extra-data="alert.extraData"
-      @delete="deleteRoleForever($event)" />
+      @delete="deleteCityForever($event)" />
     <AddCity :data="city.data" v-model:dialog="city.dialog" @fetchCities="getCities" />
     <NoDataFound v-if="!loading && cities.length == 0" />
   </div>
@@ -82,13 +82,13 @@ const editCity = async (id) => {
   emitter.emit("showLoading", false);
 };
 
-const deleteRole = async ({ id, name }) => {
+const deleteCity = async ({ id, name }) => {
   alert.title = `Confirmation Required`;
   alert.text = `<div class="mb-2">Are you sure you want to delete City <span class="text-red text-capitalize font-weight-bold text-decoration-underline">${name}</span>?</div>This action is permanent and cannot be undone`;
   alert.extraData = id;
   alert.dialog = true;
 };
-const deleteRoleForever = async (id) => {
+const deleteCityForever = async (id) => {
   console.log(id);
   emitter.emit("showLoading", true);
   try {

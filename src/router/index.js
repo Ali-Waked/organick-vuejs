@@ -113,7 +113,7 @@ const routes = [
         component: () => import("@/views/front/NewsView.vue"),
       },
       {
-        path: "/news/single",
+        path: "/news/single/:news",
         name: "show-news",
         meta: {
           title: "News",
@@ -259,13 +259,22 @@ const routes = [
         component: () => import("@/views/front/FavoritesView.vue"),
       },
       {
-        path: "/products/rating",
-        name: "rating-product",
+        path: "/rate-organick",
+        name: "rating-organick",
         meta: {
-          title: "Rating",
+          title: "Rate Organick",
           requiresAuth: true,
         },
-        component: () => import("@/views/front/RatingProductView.vue"),
+        component: () => import("@/views/front/RateOrganick.vue"),
+      },
+      {
+        path: "/chat",
+        name: "chat",
+        meta: {
+          title: "Chat",
+          requiresAuth: true,
+        },
+        component: () => import("@/views/front/ChatApp.vue"),
       },
 
       {
@@ -296,23 +305,36 @@ const routes = [
     component: () => import("@/views/front/CheckoutView.vue"),
   },
   {
-    // path: "/dashboard",
     path: "/:role/dashboard",
     component: () => import("@/views/layouts/DashboardLayout.vue"),
-    meta: {
-      requiresAuth: true,
-    },
-    beforeEnter: (to, from, next) => {
+    meta: { requiresAuth: true },
+
+    /* validate role once */
+    beforeEnter: (to, _from, next) => {
       const validRoles = ["admin", "driver", "moderator"];
-      if (validRoles.includes(to.params.role)) {
-        next();
-      } else {
-        next({ name: "page-not-found" });
+      const userRole = storeToRefs(useAuthStore()).user.value?.type;
+      const requestedRole = to.params.role;
+
+      if (!validRoles.includes(requestedRole)) {
+        return next({ name: "page-not-found", params: { pathMatch: to.path.substring(1).split("/") } });
       }
+
+      if (userRole !== requestedRole) {
+        return next({ name: "page-not-found", params: { pathMatch: to.path.substring(1).split("/") } });
+      }
+
+      next();
     },
     children: [
       {
         path: "",
+        redirect: (to) => ({
+          name: "dashboard",
+          params: { role: to.params.role },
+        }),
+      },
+      {
+        path: "index",
         name: "dashboard",
         meta: {
           title: "Dashboard",
@@ -324,6 +346,7 @@ const routes = [
         name: "dashboard-categories",
         meta: {
           title: "Categories",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/category/CategoriesView.vue"),
@@ -333,6 +356,7 @@ const routes = [
         name: "dashboard-add-category",
         meta: {
           title: "Add Category",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/category/AddCategoryView.vue"),
@@ -342,6 +366,7 @@ const routes = [
         name: "dashboard-edit-category",
         meta: {
           title: "Edit Category",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/category/AddCategoryView.vue"),
@@ -351,6 +376,7 @@ const routes = [
         name: "dashboard-show-category",
         meta: {
           title: "Show Category",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/category/ShowCategoryView.vue"),
@@ -360,14 +386,42 @@ const routes = [
         name: "dashboard-products",
         meta: {
           title: "Products",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/product/ProductsView.vue"),
+      },
+      {
+        path: "discount",
+        name: "dashboard-discount",
+        meta: {
+          title: "Discount",
+          roles: ['admin']
+        },
+        component: () => import("@/views/dashboard/discount/DiscountView.vue"),
+      },
+      {
+        path: "customer-feedbacks-for-site",
+        name: "dashboard-customer-feedbacks",
+        meta: {
+          title: "customer feedbacks",
+          roles: ['admin']
+        },
+        component: () => import("@/views/dashboard/feedback/CustomerFeedbackView.vue"),
+      },
+      {
+        path: "chat",
+        name: "dashboard-chat",
+        meta: {
+          title: "Chat",
+        },
+        component: () => import("@/views/dashboard/chat/ChatApp.vue"),
       },
       {
         path: "products/trash",
         name: "dashboard-products-trash",
         meta: {
           title: "Products Trash",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/product/ProductsTrashedView.vue"),
@@ -377,6 +431,7 @@ const routes = [
         name: "dashboard-add-product",
         meta: {
           title: "Add Products",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/product/AddProductView.vue"),
       },
@@ -385,6 +440,7 @@ const routes = [
         name: "dashboard-edit-product",
         meta: {
           title: "Edit Products",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/product/AddProductView.vue"),
       },
@@ -393,6 +449,7 @@ const routes = [
         name: "dashboard-show-product",
         meta: {
           title: "Show Product",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/product/ShowProductView.vue"),
@@ -402,6 +459,7 @@ const routes = [
         name: "dashboard-news",
         meta: {
           title: "News",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/news/NewsView.vue"),
       },
@@ -410,6 +468,7 @@ const routes = [
         name: "dashboard-add-news",
         meta: {
           title: "Add News",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/news/AddNewsView.vue"),
       },
@@ -418,6 +477,7 @@ const routes = [
         name: "dashboard-edit-news",
         meta: {
           title: "Edit News",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/news/AddNewsView.vue"),
       },
@@ -434,6 +494,7 @@ const routes = [
         name: "dashboard-messages",
         meta: {
           title: "Messages",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/message/MessagesView.vue"),
       },
@@ -442,6 +503,7 @@ const routes = [
         name: "dashboard-message-show",
         meta: {
           title: "Messages",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/message/ShowMessageView.vue"),
@@ -451,6 +513,7 @@ const routes = [
         name: "dashboard-orders",
         meta: {
           title: "Orders",
+
         },
         component: () => import("@/views/dashboard/order/OrderView.vue"),
       },
@@ -467,6 +530,7 @@ const routes = [
         name: "dashboard-users",
         meta: {
           title: "Users",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/DashboardView.vue"),
       },
@@ -475,6 +539,7 @@ const routes = [
         name: "dashboard-subscribers",
         meta: {
           title: "Users",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/SubscribersView.vue"),
       },
@@ -540,6 +605,7 @@ const routes = [
         name: "dashboard-services",
         meta: {
           title: "Services",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/service/ServicesView.vue"),
       },
@@ -548,6 +614,7 @@ const routes = [
         name: "dashboard-edit-service",
         meta: {
           title: "Edit Service Configration",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/service/EditServiceView.vue"),
@@ -573,6 +640,7 @@ const routes = [
         name: "dashboard-roles",
         meta: {
           title: "Roles",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/roles/RolesView.vue"),
       },
@@ -581,6 +649,7 @@ const routes = [
         name: "dashboard-add-role",
         meta: {
           title: "Add Roles",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/roles/AddRoleView.vue"),
       },
@@ -589,6 +658,7 @@ const routes = [
         name: "dashboard-edit-role",
         meta: {
           title: "Edit Roles",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/roles/AddRoleView.vue"),
       },
@@ -597,6 +667,7 @@ const routes = [
         name: "dashboard-payment-methods",
         meta: {
           title: "PaymentMethods",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/paymentMethod/PaymentMethodsView.vue"),
@@ -606,6 +677,7 @@ const routes = [
         name: "dashboard-eidt-payment-method",
         meta: {
           title: "Edit PaymentMethods",
+          roles: ['admin']
         },
         component: () =>
           import("@/views/dashboard/paymentMethod/EditPaymentMethodView.vue"),
@@ -615,6 +687,7 @@ const routes = [
         name: "dashboard-reports",
         meta: {
           title: "Reports",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/report/ReportView.vue"),
       },
@@ -623,6 +696,7 @@ const routes = [
         name: "dashboard-cities",
         meta: {
           title: "Cities",
+          roles: ['admin']
         },
         component: () => import("@/views/dashboard/city/CitiesView.vue"),
       },
@@ -644,6 +718,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
   let position = { x: 0, y: 0 };
   if (sessionStorage.getItem("scrollPosition")) {
     position = JSON.parse(sessionStorage.getItem("scrollPosition"));
@@ -653,7 +728,11 @@ router.beforeEach((to, from, next) => {
   window.scrollTo(position.x, position.y);
   document.title = to.meta.title;
   if (to.meta.requiresAuth) {
-    if (useAuthStore().isAuth) {
+    if (authStore.isAuth) {
+      const userRole = authStore.user?.type;
+      if (to.meta.roles && !to.meta.roles.includes(userRole)) {
+        return next({ name: 'page-not-found', params: { pathMatch: to.path.substring(1).split("/") } }); // أو صفحة "غير مصرح"
+      }
       next();
     } else {
       if (to.fullPath.includes("admin")) {

@@ -2,34 +2,39 @@
   <div class="product-item position-relative">
     <v-hover v-slot="{ isHovering, props }">
       <v-card :color="bgColor" :class="[
-        'pa-6 cursor-pointer main-transition w-100',
+        ' cursor-pointer main-transition w-100',
         isHovering ? 'elevation-3' : 'elevation-0',
-      ]" v-bind="props" style="border-radius: 18px" @click="showLoading(slug)">
-        <v-chip class="text-capitalize open-sans" variant="flat" color="#274C5B"
-          style="font-size: 13px; color: #fff; border-radius: 8px">{{ categoryName }}</v-chip>
-        <div class="image d-flex justify-center align-center">
-          <!-- <CategoryVegetable width="250" class="mt-n6" /> -->
-          <img :src="image" width="250" alt="" />
-        </div>
-        <div class="info">
-          <h4 class="category-name roboto">{{ productName }}</h4>
-          <v-divider class="my-1" color="gray"></v-divider>
-          <div class="d-flex justify-space-between align-center">
-            <div class="price open-sans">
-              <span class="old-price text-decoration-line-through">${{ oldPrice }}</span>
-              <span class="new-price">${{ newPrice }}</span>
+      ]" v-bind="props" style="border-radius: 18px">
+        <div>
+
+          <div class="position-relative overflow-hidden pa-6" @click="showLoading(slug)"> <v-chip
+              class="text-capitalize open-sans" variant="flat" color="#274C5B"
+              style="font-size: 13px; color: #fff; border-radius: 8px">{{ categoryName }}</v-chip>
+            <div class="image d-flex justify-center align-center">
+              <!-- <CategoryVegetable width="250" class="mt-n6" /> -->
+              <img :src="image" width="250" alt="" />
             </div>
-            <v-rating color="#FFA858" length="5" half-increments style="pointer-events: none; font-size: 11px"
-              size="15px" :model-value="rating"></v-rating>
+            <div class="info">
+              <h4 class="category-name roboto">{{ productName }}</h4>
+              <v-divider class="my-1" color="gray"></v-divider>
+              <div class="d-flex justify-space-between align-center">
+                <div class="price open-sans">
+                  <span class="old-price text-decoration-line-through">${{ oldPrice }}</span>
+                  <span class="new-price">${{ newPrice }}</span>
+                </div>
+                <v-rating color="#FFA858" length="5" half-increments style="pointer-events: none; font-size: 11px"
+                  size="15px" :model-value="rating"></v-rating>
+              </div>
+            </div>
+          </div>
+          <div class="icons position-absolute" v-if="authStore.isCustomer">
+            <v-icon icon="mdi-heart" color="red-darken-2" :class="[isFavorite ? 'heart-icon' : '']"
+              @click="removeFormFavorite(productId)" />
+            <v-icon icon="mdi-heart-outline" color="red-darken-2" :class="[!isFavorite ? 'heart-icon' : '']"
+              @click="addToFavorite(productId)" />
           </div>
         </div>
       </v-card>
-      <div class="icons position-absolute ">
-        <v-icon icon="mdi-heart" color="red-darken-2" :class="[isFavorite ? 'heart-icon' : '']"
-          @click="removeFormFavorite(productId)" />
-        <v-icon icon="mdi-heart-outline" color="red-darken-2" :class="[!isFavorite ? 'heart-icon' : '']"
-          @click="addToFavorite(productId)" />
-      </div>
     </v-hover>
 
   </div>
@@ -41,6 +46,9 @@ import CategoryVegetable from "@/components/front/svgs/image/CategoryVegetable.v
 import { inject } from "vue";
 import { useFavoriteStore } from "@/stores/front/favorite";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/auth/auth";
+
+const authStore = useAuthStore();
 
 const props = defineProps({
   rating: { type: Number, default: 5 },
@@ -114,9 +122,10 @@ const showLoading = (slug) => {
   }
 
   .v-card {
-    +.icons {
+    .icons {
       top: 24px;
       right: 24px;
+      z-index: 100000;
 
       i {
         position: absolute;
@@ -134,7 +143,7 @@ const showLoading = (slug) => {
     }
 
     &:hover {
-      +.icons {
+      .icons {
         i {
           // display: none;
           right: 0;
@@ -147,7 +156,7 @@ const showLoading = (slug) => {
       // }
     }
 
-    +.icons:hover {
+    .icons:hover {
       i {
         // display: none;
         right: 0;

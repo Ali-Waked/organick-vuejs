@@ -2,7 +2,7 @@
   <div class="single-shop" v-if="!loading">
     <BannerSection />
     <ProductsDetails :product="data" />
-    <!-- <RelatedProducts /> -->
+    <RelatedProducts />
     <SubscribeSection />
   </div>
 </template>

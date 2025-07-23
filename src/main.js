@@ -86,38 +86,38 @@ app.provide("emitter", emitter);
 //     encrypted: true,
 //   });
 // });
-import Echo from "laravel-echo";
-import Pusher from "pusher-js";
-import axios from "axios";
-import axiosClient from "./axiosClient";
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-window.Pusher = Pusher;
-const echo = new Echo({
-  broadcaster: "pusher",
-  cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-  encrypted: true,
-  key: import.meta.env.VITE_PUSHER_APP_KEY,
-  authorizer: (channel, options) => {
-    return {
-      authorize: (socketId, callback) => {
-        axiosClient
-          .post("/broadcasting/auth", {
-            socket_id: socketId,
-            channel_name: channel.name,
-          })
-          .then((response) => {
-            callback(false, response.data);
-          })
-          .catch((error) => {
-            callback(true, error);
-          });
-      },
-    };
-  },
-});
-// app.use(mavonEditor);
-app.provide("Echo", echo);
+// import Echo from "laravel-echo";
+// import Pusher from "pusher-js";
+// import axios from "axios";
+// import axiosClient from "./axiosClient";
+// axios.defaults.withCredentials = true;
+// axios.defaults.withXSRFToken = true;
+// window.Pusher = Pusher;
+// const echo = new Echo({
+//   broadcaster: "pusher",
+//   cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//   encrypted: true,
+//   key: import.meta.env.VITE_PUSHER_APP_KEY,
+//   authorizer: (channel, options) => {
+//     return {
+//       authorize: (socketId, callback) => {
+//         axiosClient
+//           .post("/broadcasting/auth", {
+//             socket_id: socketId,
+//             channel_name: channel.name,
+//           })
+//           .then((response) => {
+//             callback(false, response.data);
+//           })
+//           .catch((error) => {
+//             callback(true, error);
+//           });
+//       },
+//     };
+//   },
+// });
+// // app.use(mavonEditor);
+// app.provide("Echo", echo);
 app.use(VueSweetalert2);
 // app.use(i18n);
 // app.config.globalProperties.loading = false;

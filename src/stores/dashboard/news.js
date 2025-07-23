@@ -78,14 +78,14 @@ export const useNewsStore = defineStore("dashboard-bolg", () => {
 
   const updateNews = async (data, slug) => {
     loading.value = true;
+    // console.log(data.getAll('title'));
     await axiosClient
-      .put(`/dashboard/news/${slug}`, data, {
+      .post(`/dashboard/news/${slug}`, data, {
         headers: {
           "content-type": "multipart/form-data",
         },
       })
       .then((response) => {
-        // router.push({ name: "dashboard-news" });
         console.log(response);
         emitter.emit("alert", [
           "success",
