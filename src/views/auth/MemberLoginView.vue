@@ -7,12 +7,31 @@
         </v-col>
         <v-col cols="12" sm="10" md="6" class="mt-0 mt-md-16">
           <div class="form-container">
-            <form @submit.prevent="login" class="open-sans d-block w-100 mt-0 mt-md-10">
-              <v-text-field label="Enter Your Email" type="email" variant="outlined" color="#274C5B"
-                :error-messages="errors.email" v-model="email" class="mb-2"></v-text-field>
-              <v-text-field label="Enter Your Password" type="password" variant="outlined" color="#274C5B"
-                :error-messages="errors.password" v-model="password" class="mb-2"></v-text-field>
-              <v-btn class="text-none w-100" type="submit" height="50" :loading>Login</v-btn>
+            <form
+              @submit.prevent="login"
+              class="open-sans d-block w-100 mt-0 mt-md-10"
+            >
+              <v-text-field
+                label="Enter Your Email"
+                type="email"
+                variant="outlined"
+                color="#274C5B"
+                :error-messages="errors.email"
+                v-model="email"
+                class="mb-2"
+              ></v-text-field>
+              <v-text-field
+                label="Enter Your Password"
+                type="password"
+                variant="outlined"
+                color="#274C5B"
+                :error-messages="errors.password"
+                v-model="password"
+                class="mb-2"
+              ></v-text-field>
+              <v-btn class="text-none w-100" type="submit" height="50" :loading
+                >Login</v-btn
+              >
             </form>
           </div>
         </v-col>
@@ -28,27 +47,44 @@ import LoginImage from "@/components/front/svgs/image/LoginImage.vue";
 import { useAuthStore } from "../../stores/auth/auth";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
-import LoginWithButton from "../../components/dashboard/global/LoginWithButton.vue";
+// import LoginWithButton from "../../components/dashboard/global/LoginWithButton.vue";
 
-import GoogleLogo from "@/components/front/svgs/icons/GoogleLogo.vue";
-import XLogo from "@/components/front/svgs/icons/XLogo.vue";
+// import GoogleLogo from "@/components/front/svgs/icons/GoogleLogo.vue";
+// import XLogo from "@/components/front/svgs/icons/XLogo.vue";
 import SignInImage from "../../components/front/svgs/image/SignInImage.vue";
 
 const email = ref("");
 const password = ref("");
 const auth = useAuthStore();
-const { loading, errors, isAuthenticated, redirect } = storeToRefs(auth);
+const {
+  loading,
+  errors,
+  isAuthenticated,
+  redirect,
+  isAdmin,
+  isDriver,
+  isModerator,
+} = storeToRefs(auth);
 const router = useRouter();
 const route = useRoute();
 const login = async () => {
   await auth.login({ email: email.value, password: password.value });
   if (redirect) {
-    router.push({ name: "dashboard", params: { role: 'admin' } });
+    if (isAdmin) {
+      router.push({ name: "dashboard", params: { role: "admin" } });
+    } else if (isDriver) {
+      router.push({ name: "dashboard", params: { role: "driver" } });
+    } else if (isModerator) {
+      router.push({ name: "dashboard", params: { role: "moderator" } });
+    } else {
+      router.push({ name: "home" });
+    }
+    // router.push({ name: "dashboard", params: { role: 'admin' } });
   }
 };
-const LoginWith = (driver) => {
-  window.location = `http://localhost/auth/${driver}/redirect`;
-};
+// const LoginWith = (driver) => {
+//   window.location = `http://localhost/auth/${driver}/redirect`;
+// };
 onMounted(() => {
   useLoadingStore().stopLoading();
 });
@@ -57,7 +93,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .login {
   .form-container {
-
     // height: 80vh;
     form {
       position: relative;
@@ -73,8 +108,8 @@ onMounted(() => {
         font-size: 20px;
       }
 
-      +div {
-        >p {
+      + div {
+        > p {
           position: relative;
           color: $arapawa;
           font-size: 30px;

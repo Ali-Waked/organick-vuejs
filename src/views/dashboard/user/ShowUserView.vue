@@ -64,7 +64,9 @@
       </div>
       <div class="box" v-if="data.billing_address?.notes">
         <span class="mr-4 roboto">Note</span>
-        <span class="open-sans text-capitalize">{{ data.billing_address.notes }}</span>
+        <span class="open-sans text-capitalize">{{
+          data.billing_address.notes
+        }}</span>
       </div>
       <div class="box" v-if="data.socials">
         <span class="mr-4 roboto">Social Media</span>
@@ -76,10 +78,23 @@
         <span class="mr-4 roboto">Actions</span>
         <span class="open-sans">
           <div>
-            <v-btn color="#ff9500" bg-color="#fff3e0" variant="outlined" class="mr-2" append-icon="mdi-pen"
-              @click="editUser(data)">Edit</v-btn>
-            <v-btn color="#f44336" bg-color="#ffebee" variant="outlined" append-icon="mdi-delete"
-              @click="deleteUser(data.email)">Delete</v-btn>
+            <v-btn
+              color="#ff9500"
+              bg-color="#fff3e0"
+              variant="outlined"
+              class="mr-2"
+              append-icon="mdi-pen"
+              @click="editUser(data)"
+              >Edit</v-btn
+            >
+            <v-btn
+              color="#f44336"
+              bg-color="#ffebee"
+              variant="outlined"
+              append-icon="mdi-delete"
+              @click="deleteUser(data.email)"
+              >Delete</v-btn
+            >
           </div>
         </span>
       </div>
@@ -89,8 +104,13 @@
     {{ data }}
   </pre>
   <ShowImage :image-src="imageSrc" v-model:model-value="dialog" />
-  <DeleteAlert :title="alert.title" :text="alert.text" v-model:dialog="alert.dialog" :extra-data="alert.extraData"
-    @delete="deleteUserForever($event)" />
+  <DeleteAlert
+    :title="alert.title"
+    :text="alert.text"
+    v-model:dialog="alert.dialog"
+    :extra-data="alert.extraData"
+    @delete="deleteUserForever($event)"
+  />
 </template>
 
 <script setup>
@@ -146,7 +166,7 @@ const deleteUser = (email) => {
   alert.extraData = email;
   alert.dialog = true;
 };
-const deleteUserForever = () => { };
+const deleteUserForever = () => {};
 const editUser = ({ email, first_name, last_name }) => {
   emitter.emit("showLoading", true);
   router.push({
@@ -189,16 +209,33 @@ watch(
   { immediate: true }
 );
 
-onMounted(async () => {
-  emitter.emit("showLoading", true);
-  const email = route.query.email;
-  if (email) {
-    await userStore.getUser(singularName.value, email);
-    items.push({
+watch(
+  () => route.query.email,
+  async (newVal, oldVal) => {
+    emitter.emit("showLoading", true);
+    console.log("new val", newVal, oldVal);
+    const notify = route.query.notify;
+    await userStore.getUser(singularName.value, newVal, notify);
+    items[2] = {
       title: fullName.value,
-    });
+    };
+    emitter.emit("showLoading", false);
+  },
+  {
+    immediate: true,
   }
-  emitter.emit("showLoading", false);
+);
+
+onMounted(async () => {
+  // emitter.emit("showLoading", true);
+  // const email = route.query.email;
+  // const notify = route.query.notify;
+  // if (email) {
+  //   items.push({
+  //     title: fullName.value,
+  //   });
+  // }
+  // emitter.emit("showLoading", false);
 });
 </script>
 

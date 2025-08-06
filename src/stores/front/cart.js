@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, inject } from "vue";
 import axiosClient from "../../axiosClient";
 
 export const useCartStore = defineStore("cart", () => {
   const localStorageName = "cart-products";
   const loading = ref(true);
+  const emitter = inject('emitter');
   const item = ref({
     quantity: 1,
   });
@@ -28,19 +29,14 @@ export const useCartStore = defineStore("cart", () => {
       .post("/cart", JSON.stringify(item.value))
       .then((response) => {
         checkItemIsExists();
-        // console.log("not exists", notExists);
-        // console.log(response);
         if (!exists.value) {
-          console.log("not found in cart");
           item.value.id = response.data.id;
           items.value.push(JSON.parse(JSON.stringify(item.value)));
         } else {
-          console.log("found in items");
           exists.value = false;
         }
+        emitter.emit("showAlert", response.data.message)
         setItemsToLocalStorage(items.value);
-        // item.value.quantity = 1;
-        // localStorage.setItem(localStorageName, JSON.stringify(items.value));
       })
       .catch((error) => {
         console.error("error", error);

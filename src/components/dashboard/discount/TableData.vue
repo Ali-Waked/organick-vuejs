@@ -26,8 +26,17 @@
           <td>{{ dateFormat(discount.created_at) }}</td>
           <td colspan="5" class="d-flex align-center justify-center">
             <!-- <ActionButton tooltip="Edit The Discount" icon="mdi-pen" color="#ff9500" backgroundColor="#fff3e0" /> -->
-            <ActionButtons @delete="$emit('deleteDiscount', { name: discount.name, id: discount.id })"
-              @edit="$emit('editDiscount', discount.id)" :tooltip />
+            <ActionButtons
+              @delete="
+                $emit('deleteDiscount', {
+                  name: discount.name,
+                  id: discount.id,
+                })
+              "
+              @edit="$emit('editDiscount', discount.id)"
+              @show="$emit('showDiscount', discount)"
+              :tooltip
+            />
           </td>
         </tr>
       </tbody>

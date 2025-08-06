@@ -306,6 +306,7 @@ const routes = [
   },
   {
     path: "/:role/dashboard",
+    name: 'dashboard-parent',
     component: () => import("@/views/layouts/DashboardLayout.vue"),
     meta: { requiresAuth: true },
 
@@ -700,6 +701,15 @@ const routes = [
         },
         component: () => import("@/views/dashboard/city/CitiesView.vue"),
       },
+      {
+        path: "notifications",
+        name: "dashboard-notifications",
+        meta: {
+          title: "Notifications",
+          roles: ['admin', 'driver', 'moderator']
+        },
+        component: () => import("@/views/dashboard/notification/NotificationsView.vue"),
+      },
       // {
       //   path: "users/subscribers",
       //   name: "dashboard-subscribers",
@@ -717,8 +727,9 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
+  const { isAuth, user } = storeToRefs(authStore);
   let position = { x: 0, y: 0 };
   if (sessionStorage.getItem("scrollPosition")) {
     position = JSON.parse(sessionStorage.getItem("scrollPosition"));
@@ -728,10 +739,15 @@ router.beforeEach((to, from, next) => {
   window.scrollTo(position.x, position.y);
   document.title = to.meta.title;
   if (to.meta.requiresAuth) {
-    if (authStore.isAuth) {
-      const userRole = authStore.user?.type;
+    if (isAuth.value) {
+      const userRole = user.value?.type;
+      if (userRole == null) {
+        await authStore.checkAuth();
+      }
+      console.log('auth');
+      console.log('isAuth', isAuth.value, 'type', 'userRole', userRole, user, user.value);
       if (to.meta.roles && !to.meta.roles.includes(userRole)) {
-        return next({ name: 'page-not-found', params: { pathMatch: to.path.substring(1).split("/") } }); // أو صفحة "غير مصرح"
+        return next({ name: 'page-not-found', params: { pathMatch: to.path.substring(1).split("/") } });
       }
       next();
     } else {

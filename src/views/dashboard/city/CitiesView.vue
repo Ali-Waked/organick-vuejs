@@ -1,17 +1,37 @@
 <template>
   <div class="cities">
     <PageTitle title="Cities" :items />
-    <FilterSection v-if="!loading" v-model:search="filter.name" search-label="Search By City Name" @add="addCity"
-      btn-label="Add New City" />
+    <FilterSection
+      v-if="!loading"
+      v-model:search="filter.name"
+      search-label="Search By City Name"
+      @add="addCity"
+      btn-label="Add New City"
+    />
     <TableData :data="cities" v-if="cities.length">
       <template #actions="{ item }">
-        <ActionButtons @delete="deleteCity(item)" @edit="editCity(item.id)" :tooltip />
+        <ActionButtons
+          @delete="deleteCity(item)"
+          @edit="editCity(item.id)"
+          @show="showCity(item)"
+          :tooltip
+        />
       </template>
     </TableData>
-    <DeleteAlert :title="alert.title" :text="alert.text" v-model:dialog="alert.dialog" :extra-data="alert.extraData"
-      @delete="deleteCityForever($event)" />
-    <AddCity :data="city.data" v-model:dialog="city.dialog" @fetchCities="getCities" />
+    <DeleteAlert
+      :title="alert.title"
+      :text="alert.text"
+      v-model:dialog="alert.dialog"
+      :extra-data="alert.extraData"
+      @delete="deleteCityForever($event)"
+    />
+    <AddCity
+      :data="city.data"
+      v-model:dialog="city.dialog"
+      @fetchCities="getCities"
+    />
     <NoDataFound v-if="!loading && cities.length == 0" />
+    <ShowCity :city="data.city" v-model:dialog="data.dialog" />
   </div>
 </template>
 
@@ -27,6 +47,7 @@ import axiosClient from "@/axiosClient";
 import DeleteAlert from "@/components/dashboard/global/DeleteAlert.vue";
 import ActionButtons from "@/components/dashboard/global/ActionButtons.vue";
 import AddCity from "../../../components/dashboard/city/AddCity.vue";
+import ShowCity from "../../../components/dashboard/city/ShowCity.vue";
 
 const router = useRouter();
 const emitter = inject("emitter");
@@ -35,12 +56,57 @@ const route = useRoute();
 const filter = reactive({
   name: "",
 });
+const position = reactive({
+  x: 0,
+  y: 0,
+});
 // const addDialog = ref(true);
 const city = reactive({
   id: "",
   dialog: false,
   data: {},
 });
+const data = reactive({
+  city: {},
+  dialog: false,
+});
+const showCity = async ({ id, name }) => {
+  emitter.emit("showLoading", true);
+  try {
+    await axiosClient.get(`/dashboard/cities/${id}`).then((response) => {
+      position.x = window.scrollX;
+      position.y = window.scrollY;
+      sessionStorage.setItem("scrollPosition", JSON.stringify(position));
+      router.replace({
+        query: {
+          ...router.currentRoute.value.query,
+          name: name,
+          id: id,
+        },
+      });
+      data.city = response.data;
+      data.dialog = true;
+    });
+  } catch (e) {
+    console.error(e);
+  } finally {
+    emitter.emit("showLoading", false);
+  }
+};
+watch(
+  () => data.dialog,
+  (newVal) => {
+    if (!newVal) {
+      const query = { ...router.currentRoute.value.query };
+
+      delete query.id;
+      delete query.name;
+
+      sessionStorage.setItem("scrollPosition", JSON.stringify(position));
+      router.replace({ query });
+    }
+  }
+);
 const alert = reactive({});
 const role = route.params.role;
 const items = [
@@ -107,7 +173,7 @@ const deleteCityForever = async (id) => {
 const fetchCities = async () => {
   try {
     await axiosClient
-      .get(`/dashboard/cities?filter=${filter.name}`)
+      .get(`/dashboard/cities?filter=${JSON.stringify(filter)}`)
       .then((response) => {
         cities.value = response.data;
         console.log(cities.value);
@@ -119,11 +185,15 @@ const fetchCities = async () => {
   }
 };
 
-const debouncedFetch = debounce(() => {
-  fetchCities();
-  const query = {};
-  if (filter.name) query.search = filter.name;
-  router.push({ path: route.fullPath, query: query });
+const debouncedFetch = debounce(async () => {
+  await fetchCities();
+  const query = { ...router.currentRoute.value.query };
+  if (filter.name) {
+    query.search = filter.name;
+  } else {
+    delete query.search;
+  }
+  router.replace({ query: query });
 }, 750);
 
 watch(
@@ -132,7 +202,7 @@ watch(
     emitter.emit("showLoading", true);
     debouncedFetch();
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
 onBeforeUnmount(() => {
@@ -147,6 +217,9 @@ const getCities = () => {
 onMounted(async () => {
   emitter.emit("showLoading", true);
   filter.name = route.query.search ?? "";
-  await debouncedFetch();
+  if (route.query.name && route.query.id) {
+    await showCity(route.query);
+  }
+  // await debouncedFetch();
 });
 </script>

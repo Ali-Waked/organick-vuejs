@@ -125,6 +125,7 @@
           <div>
             <v-checkbox
               v-model="product.is_featured"
+              class="text-grey-darken-2"
               label="Make product as featured product"
               color="blue"
               :value="1"
@@ -212,8 +213,9 @@ onMounted(async () => {
     emitter.emit("showLoading", false);
     return;
   }
+  const notify_id = route.query.notify;
   title.value = "Edit Product";
-  await productStore.showProduct(route.params.product);
+  await productStore.showProduct(route.params.product, notify_id);
   items.value.push({ title: product.value.name });
   items.value[items.value.length - 2] = {
     title: product.value.name,

@@ -6,45 +6,72 @@
           <div class="image position-relative">
             <img :src="product.image" alt="" />
             <!-- <SingleProduct /> -->
-            <v-chip class="text-capitalize open-sans position-absolute cursor-default" variant="flat" color="#274C5B"
+            <v-chip
+              class="text-capitalize open-sans position-absolute cursor-default"
+              variant="flat"
+              color="#274C5B"
               style="
                 font-size: 15px;
                 color: #fff;
                 border-radius: 9px;
                 left: 40px;
                 top: 30px;
-              ">
+              "
+            >
               {{ product.category?.name }}
             </v-chip>
-            <div class="icons position-absolute " v-if="authStore.isCustomer()">
-              <v-icon icon="mdi-heart" color="red-darken-2" :class="[product.isFavorite ? 'heart-icon' : '']"
-                @click="removeFormFavorite(product.id)" />
-              <v-icon icon="mdi-heart-outline" color="red-darken-2" :class="[!product.isFavorite ? 'heart-icon' : '']"
-                @click="addToFavorite(product.id)" />
+            <div class="icons position-absolute" v-if="authStore.isCustomer">
+              <v-icon
+                icon="mdi-heart"
+                color="red-darken-2"
+                :class="[product.isFavorite ? 'heart-icon' : '']"
+                @click="removeFormFavorite(product.id)"
+              />
+              <v-icon
+                icon="mdi-heart-outline"
+                color="red-darken-2"
+                :class="[!product.isFavorite ? 'heart-icon' : '']"
+                @click="addToFavorite(product.id)"
+              />
             </div>
           </div>
         </v-col>
         <v-col cols="12" sm="10" md="6">
           <div class="content">
             <h3 class="product-name roboto">{{ product.name }}</h3>
-            <v-rating color="#FFA858" length="5" half-increments style="pointer-events: none; font-size: 11px"
-              size="15px" :model-value="product.averageRating"></v-rating>
+            <v-rating
+              color="#FFA858"
+              length="5"
+              half-increments
+              style="pointer-events: none; font-size: 11px"
+              size="15px"
+              :model-value="product.averageRating"
+            ></v-rating>
             <div class="price open-sans">
               <span class="old-price text-decoration-line-through">{{
                 currencyFormat(product.price)
-                }}</span>
+              }}</span>
               <span class="new-price">{{ currencyFormat(product.price) }}</span>
             </div>
             <p class="description open-sans">
               {{ product.description }}
             </p>
-            <div class="add-to-cart roboto d-flex align-center ga-4" v-if="authStore.isCustomer()">
+            <div
+              class="add-to-cart roboto d-flex align-center ga-4"
+              v-if="authStore.isCustomer"
+            >
               <div class="d-flex align-center ga-4">
                 <span>Quantity :</span>
                 <input type="number" min="1" v-model="item.quantity" />
               </div>
-              <v-btn variant="flat" class="text-none roboto" width="190" height="64" :loading="loading"
-                @click="addToCart">
+              <v-btn
+                variant="flat"
+                class="text-none roboto"
+                width="190"
+                height="64"
+                :loading="loading"
+                @click="addToCart"
+              >
                 <span>Add To Cart</span>
                 <v-icon>mdi-arrow-right</v-icon>
               </v-btn>
@@ -53,11 +80,20 @@
         </v-col>
         <v-col cols="12" lg="10" class="text-center">
           <div class="actions d-flex ga-3 justify-center">
-            <v-btn v-for="(button, index) in buttons" :key="index" :variant="componentShow.__name === button.component.__name
-              ? 'flat'
-              : 'tonal'
-              " class="text-none roboto font-weight-bold" width="290" height="64" color="#274C5B"
-              @click="changeInfo(button.component)">
+            <v-btn
+              v-for="(button, index) in buttons"
+              :key="index"
+              :variant="
+                componentShow.__name === button.component.__name
+                  ? 'flat'
+                  : 'tonal'
+              "
+              class="text-none roboto font-weight-bold"
+              width="290"
+              height="64"
+              color="#274C5B"
+              @click="changeInfo(button.component)"
+            >
               {{ button.label }}
             </v-btn>
           </div>
@@ -112,8 +148,8 @@ const addToCart = async () => {
   };
   setTimeout(async () => {
     await cartStore.addItem();
-    emitter.emit("showAlert", "Add Product To Cart Successfully");
-    emitter.emit('openCart', true);
+    // emitter.emit("showAlert", "Add Product To Cart Successfully");
+    emitter.emit("openCart", true);
   }, 500);
 };
 
@@ -122,7 +158,8 @@ const changeInfo = (component) => {
 };
 
 const addToFavorite = async (productId) => {
-  await favoriteStore.addToFavorite(productId)
+  await favoriteStore
+    .addToFavorite(productId)
     .then(() => {
       // emit("update:isFavorite", true);
       props.product.isFavorite = true;
@@ -132,14 +169,12 @@ const addToFavorite = async (productId) => {
 };
 
 const removeFormFavorite = async (productId) => {
-  await favoriteStore.removeFromFavorite(productId)
-    .then(() => {
-      // emit("update:isFavorite", false);
-      props.product.isFavorite = false;
-      emitter.emit('showAlert', "Remove Product From Favorite Successfully");
-    })
-}
-
+  await favoriteStore.removeFromFavorite(productId).then(() => {
+    // emit("update:isFavorite", false);
+    props.product.isFavorite = false;
+    emitter.emit("showAlert", "Remove Product From Favorite Successfully");
+  });
+};
 
 onMounted(() => {
   item.value.quantity = 1;
@@ -191,7 +226,6 @@ onMounted(() => {
         i {
           right: 0;
         }
-
       }
     }
 
@@ -199,7 +233,6 @@ onMounted(() => {
       i {
         right: 0;
       }
-
     }
   }
 
@@ -330,7 +363,7 @@ onMounted(() => {
       border-radius: 12px;
     }
 
-    +p.description {
+    + p.description {
       color: $altamira;
       font-size: 15px;
       line-height: 1.6;

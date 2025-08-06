@@ -71,7 +71,7 @@
                 size="22px"
                 ripple
                 disabled
-                :model-value="5"
+                :model-value="category.average_rating"
               ></v-rating>
             </span>
           </div>
@@ -81,7 +81,9 @@
         <div class="group d-flex flex-column flex-sm-row w-100">
           <div class="d-flex align-center w-50 justify-space-between">
             <div class="title roboto w-50">is Featcher</div>
-            <span class="d-block w-33">{{ category.products_count ? 'yes' : 'no' }}</span>
+            <span class="d-block w-33"
+              >{{ category.is_featcher ? "Yes" : "Not" }}
+            </span>
           </div>
           <div class="d-flex align-center w-50 justify-space-between">
             <div class="title roboto w-50">Created At</div>

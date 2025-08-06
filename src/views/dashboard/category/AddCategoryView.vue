@@ -57,6 +57,15 @@
             v-model:model-value="category.image"
             v-model:is-checked="isChecked"
           />
+          <div>
+            <v-checkbox
+              v-model="category.is_featured"
+              class="text-grey-darken-2"
+              label="Make category as featured category"
+              color="blue"
+              :value="1"
+            ></v-checkbox>
+          </div>
           <v-btn
             type="submit"
             elevation="0"
@@ -141,7 +150,7 @@ onMounted(async () => {
     items.value.push({ title: category.value.name });
     items.value[items.value.length - 2] = {
       title: category.value.name,
-      to: `/dashboard/categories/${category.value.slug}/show`,
+      to: `/admin/dashboard/categories/${category.value.slug}/show`,
     };
     items.value[items.value.length - 1] = {
       title: "Edit Category",

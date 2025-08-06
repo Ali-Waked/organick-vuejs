@@ -2,27 +2,48 @@
   <v-app-bar class="responisve-app-nav">
     <v-container class="d-flex justify-space-between align-center">
       <v-app-bar-nav-icon class="nav-icon" @click="showLinks" />
-      <div class="logo d-flex align-center gc-1 cursor-pointer" @click="showLoading, router.push({ name: 'home' })">
+      <div
+        class="logo d-flex align-center gc-1 cursor-pointer"
+        @click="showLoading, router.push({ name: 'home' })"
+      >
         <AppLogo width="35" height="35" />
         <span class="roboto">Organick</span>
       </div>
 
-      <div v-if="authStore.isCustomer"
+      <div
+        v-if="authStore.isCustomer"
         class="cart position-relative d-flex justify-end pr-3 align-center cursor-pointer main-transition"
-        @click="openCart">
-        <v-icon icon="mdi-cart" class="position-absolute main-transition"></v-icon>
+        @click="openCart"
+      >
+        <v-icon
+          icon="mdi-cart"
+          class="position-absolute main-transition"
+        ></v-icon>
         <span>Cart ({{ items.length }})</span>
       </div>
-      <div v-else-if="!isAuth"
+      <div
+        v-else-if="!isAuth"
         class="login position-relative d-flex justify-start pl-3 align-center cursor-pointer main-transition"
-        @click="singIn">
+        @click="singIn"
+      >
         <span>Sign In</span>
-        <v-icon icon="mdi-login" class="position-absolute main-transition"></v-icon>
+        <v-icon
+          icon="mdi-login"
+          class="position-absolute main-transition"
+        ></v-icon>
       </div>
-      <div v-else class="login position-relative d-flex justify-start pl-3 align-center cursor-pointer main-transition"
-        @click="router.push({ name: 'dashboard', params: { role: 'admin' } })">
-        <span style="font-size: 13px; position: relative;left: -4px;">Dashboard</span>
-        <v-icon icon="mdi-view-dashboard-outline" class="position-absolute main-transition"></v-icon>
+      <div
+        v-else
+        class="login position-relative d-flex justify-start pl-3 align-center cursor-pointer main-transition"
+        @click="router.push({ name: 'dashboard', params: { role: role } })"
+      >
+        <span style="font-size: 13px; position: relative; left: -4px"
+          >Dashboard</span
+        >
+        <v-icon
+          icon="mdi-view-dashboard-outline"
+          class="position-absolute main-transition"
+        ></v-icon>
       </div>
     </v-container>
   </v-app-bar>
@@ -40,7 +61,8 @@ const router = useRouter();
 const emitter = inject("emitter");
 const { items } = storeToRefs(useCartStore());
 const authStore = useAuthStore();
-const { redirect, isAuth } = storeToRefs(authStore);
+const { redirect, isAuth, user } = storeToRefs(authStore);
+const role = user.value?.type?.toLowerCase();
 const showLinks = () => {
   emitter.emit("showLinks");
 };
@@ -131,7 +153,6 @@ const showLoading = () => {
       background-color: $arapawa;
       font-size: 19px;
     }
-
 
     &:hover {
       color: $green-sheen;

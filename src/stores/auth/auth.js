@@ -6,7 +6,7 @@ import axios from "axios";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: null,
+    user: {},
     loading: false,
     errors: "",
     // router: useRouter(),
@@ -36,8 +36,8 @@ export const useAuthStore = defineStore("auth", {
           }
         })
         .catch((e) => {
+          console.log(e);
           this.errors = e.response.data.errors;
-          this.loading = false;
         })
         .finally(() => {
           this.loading = false;
@@ -126,7 +126,6 @@ export const useAuthStore = defineStore("auth", {
       try {
         await this.getCsrfToken();
         const response = await axiosClient.get("/auth/user");
-        console.log("response", response);
         if (response.status === 200) {
           this.isAuth = true;
           this.user = response.data; // Assuming user data is returned

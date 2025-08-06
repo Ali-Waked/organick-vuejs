@@ -1,39 +1,70 @@
 <template>
   <PageTitle title="Discounts" :items />
   <div class="discount-view">
-    <FilterSection v-if="!loading" v-model:search="filter.search" search-label="Search By Discount Name Or Description"
-      :addDataLoading="addDiscountLoading" @add="addDiscount" btn-label="Add New Discount">
+    <FilterSection
+      v-if="!loading"
+      v-model:search="filter.search"
+      search-label="Search By Discount Name Or Description"
+      :addDataLoading="addDiscountLoading"
+      @add="addDiscount"
+      btn-label="Add New Discount"
+    >
       <template #options>
-        <div class="d-flex flex-column flex-sm-row align-start align-sm-center gr-4 mt-1 mt-md-3">
+        <div
+          class="d-flex flex-column flex-sm-row align-start align-sm-center gr-4 mt-1 mt-md-3"
+        >
           <div class="ml-0 ml-md-6">
-            <FilterOption :options="discountMode" v-model:model-value="filter.discount_mode" btn-id="filter_by"
-              btn-label="Discount Mode" />
+            <FilterOption
+              :options="discountMode"
+              v-model:model-value="filter.discount_mode"
+              btn-id="filter_by"
+              btn-label="Discount Mode"
+            />
           </div>
           <div class="d-flex align-center">
             <div class="ml-0 ml-sm-6">
-              <FilterOption :options="discountFor" v-model:model-value="filter.discount_for" btn-id="is_active"
-                btn-label="Discount For" />
+              <FilterOption
+                :options="discountFor"
+                v-model:model-value="filter.discount_for"
+                btn-id="is_active"
+                btn-label="Discount For"
+              />
             </div>
             <SortingButton v-model:sorting-order="filter.sortingOrder" />
           </div>
         </div>
       </template>
     </FilterSection>
-    <TableData :discounts="discounts" :loading="loading" @editDiscount="editDiscount($event)"
-      @deleteDiscount="deleteDiscount($event)" />
+    <TableData
+      :discounts="discounts"
+      :loading="loading"
+      @editDiscount="editDiscount($event)"
+      @deleteDiscount="deleteDiscount($event)"
+      @showDiscount="showDiscount($event)"
+    />
     <NoDataFound v-if="!loading && !discounts.length" />
-    <v-pagination v-if="shouldShowPagination" v-model="page" :length="totalPage" @update:model-value="changePage"
-      color="#7EB693" rounded="circle" class="mt-8"></v-pagination>
-    <DeleteAlert :title="alert.title" :text="alert.text" v-model:dialog="alert.dialog" :extra-data="alert.extraData"
-      @delete="deleteDiscountForever($event)" />
-    <AddDiscountDialog :data="discount" v-model:dialog="dialog" @fetchDiscounts="getDiscounts" />
-    <!--
-    <EditDiscountDialog
-      v-model:show="showEditCategory"
-      :category="selectedCategory"
-      @update="updateCategory"
-      @cancel="cancelEditCategory"
-    /> -->
+    <v-pagination
+      v-if="shouldShowPagination"
+      v-model="page"
+      :length="totalPage"
+      @update:model-value="changePage"
+      color="#7EB693"
+      rounded="circle"
+      class="mt-8"
+    ></v-pagination>
+    <DeleteAlert
+      :title="alert.title"
+      :text="alert.text"
+      v-model:dialog="alert.dialog"
+      :extra-data="alert.extraData"
+      @delete="deleteDiscountForever($event)"
+    />
+    <AddDiscountDialog
+      :data="discount"
+      v-model:dialog="dialog"
+      @fetchDiscounts="getDiscounts"
+    />
+    <ShowDiscount :discount="data.discount" v-model:dialog="data.dialog" />
   </div>
 </template>
 
@@ -46,6 +77,7 @@ import NoDataFound from "@/components/dashboard/global/NoDataFound.vue";
 import DeleteAlert from "@/components/dashboard/global/DeleteAlert.vue";
 import AddDiscountDialog from "@/components/dashboard/discount/AddDiscountDialog.vue";
 import FilterOption from "@/components/dashboard/global/FilterOption.vue";
+import ShowDiscount from "@/components/dashboard/discount/ShowDiscount.vue";
 import { useRoute, useRouter } from "vue-router";
 import debounce from "lodash.debounce";
 import { toLower } from "lodash";
@@ -64,6 +96,7 @@ const emitter = inject("emitter");
 const dialog = ref(false);
 const alert = reactive({});
 const router = useRouter();
+const { capitalizeFirstLetter } = formats();
 
 const filter = reactive({
   search: "",
@@ -82,14 +115,14 @@ const filter = reactive({
 //   { value: "fixed", title: "Fixed Amount" },
 // ];
 const discountMode = [
-  { value: 'All', title: 'All' },
-  { value: "fixed", title: "Fixed Amount" },
-  { value: "ranged", title: "Ranged Amount" },
+  { value: "All", title: "All" },
+  { value: "Fixed", title: "Fixed Amount" },
+  { value: "Ranged", title: "Ranged Amount" },
 ];
 const discountFor = [
-  { value: 'All', title: 'All' },
-  { value: "order", title: "Order" },
-  { value: "product", title: "Product" },
+  { value: "All", title: "All" },
+  { value: "Order", title: "Order" },
+  { value: "Product", title: "Product" },
 ];
 // const statusOption = [
 //   { value: "All", title: "All" },
@@ -106,6 +139,53 @@ const items = [
   },
 ];
 
+const position = reactive({
+  x: 0,
+  y: 0,
+});
+
+const data = reactive({
+  discount: {},
+  dialog: false,
+});
+const showDiscount = async ({ id, name }) => {
+  emitter.emit("showLoading", true);
+  try {
+    await axiosClient.get(`/dashboard/discounts/${id}`).then((response) => {
+      position.x = window.scrollX;
+      position.y = window.scrollY;
+      sessionStorage.setItem("scrollPosition", JSON.stringify(position));
+      router.replace({
+        query: {
+          ...router.currentRoute.value.query,
+          name: name,
+          id: id,
+        },
+      });
+      data.discount = response.data;
+      data.dialog = true;
+    });
+  } catch (e) {
+    console.error(e);
+  } finally {
+    emitter.emit("showLoading", false);
+  }
+};
+watch(
+  () => data.dialog,
+  (newVal) => {
+    if (!newVal) {
+      const query = { ...router.currentRoute.value.query };
+
+      delete query.id;
+      delete query.name;
+
+      sessionStorage.setItem("scrollPosition", JSON.stringify(position));
+      router.replace({ query });
+    }
+  }
+);
+
 const addDiscount = async () => {
   // addDiscountLoading.value = true;
   discount.value = {};
@@ -116,9 +196,9 @@ const editDiscount = async (id) => {
   await axiosClient
     .get(`/dashboard/discounts/${id}`)
     .then((response) => {
-      console.log('is_active', response.data.is_active);
+      console.log("is_active", response.data.is_active);
       const data = response.data;
-      console.log(data.products.map(product => product.id));
+      console.log(data.products.map((product) => product.id));
 
       discount.value = {
         id: data.id,
@@ -131,14 +211,14 @@ const editDiscount = async (id) => {
         discounts_for: data.discount_for,
         starts_at: data.started_at?.slice(0, 10),
         ends_at: data.ended_at?.slice(0, 10),
-        product_ids: data.products.map(product => product.id),
-        ranges: data.ranges.map(range => ({
+        product_ids: data.products.map((product) => product.id),
+        ranges: data.ranges.map((range) => ({
           min: range.min_price,
           max: range.max_price,
           value: range.value,
           type: range.type,
         })),
-      }
+      };
       console.log(discount.value);
       dialog.value = true;
     })
@@ -179,15 +259,19 @@ const updateRoute = (page) => {
   if (filter.discount_for[0])
     query.discount_for = filter.discount_for[0].toLowerCase();
 
-  if (filter.discount_mode[0]) query.discount_mode = filter.discount_mode[0].toLowerCase();
+  if (filter.discount_mode[0])
+    query.discount_mode = filter.discount_mode[0].toLowerCase();
 
   if (filter.sortingOrder) query.sorting_order = filter.sortingOrder;
+  if (route.query.id && route.query.name) {
+    query.id = route.query.id;
+    query.name = route.query.name;
+  }
 
   if (page && totalPage.value > 1) query.page = page;
 
   router.push({ path: route.path, query: query });
 };
-
 
 const fetchDiscounts = async () => {
   try {
@@ -196,12 +280,13 @@ const fetchDiscounts = async () => {
       discount_mode: filter.discount_mode[0],
       discount_for: filter.discount_for[0],
       sortingOrder: filter.sortingOrder,
-    })
+    });
     await axiosClient
       .get(`/dashboard/discounts?filter=${dataFilter}`)
       .then((response) => {
         discounts.value = response.data.data;
         totalPage.value = response.data.last_page;
+        isShowDiscount();
       });
   } catch (e) {
     console.log("error", e);
@@ -221,7 +306,7 @@ watch(
     emitter.emit("showLoading", true);
     debouncedFetch();
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 onBeforeUnmount(() => {
   debouncedFetch.cancel();
@@ -232,11 +317,39 @@ const getDiscounts = async () => {
   await fetchDiscounts();
 };
 
-
+const isShowDiscount = async (data) => {
+  if (route.query.id && route.query.name) {
+    await showDiscount(route.query);
+  }
+};
 
 onMounted(async () => {
-  emitter.emit("showLoading", true);
-  await debouncedFetch();
+  const hasPageNumber = +route.query.page;
+  if (!isNaN(hasPageNumber)) {
+    page.value = +route.query.page;
+  }
+  filter.search = route.query.search ?? "";
+
+  filter.discount_mode = ["all", "fixed", "ranged"].includes(
+    toLower(route.query.discount_mode)
+  )
+    ? [capitalizeFirstLetter(route.query.discount_mode)]
+    : ["All"];
+  filter.discount_for = ["all", "order", "product"].includes(
+    toLower(route.query.discount_for)
+  )
+    ? [capitalizeFirstLetter(route.query.discount_for)]
+    : ["All"];
+
+  filter.sortingOrder = ["desc", "asc"].includes(
+    toLower(route.query.sorting_order)
+  )
+    ? (filter.sortingOrder = route.query.sorting_order)
+    : "desc";
+  // if (route.query.id && route.query.name) {
+  //   await showDiscount(route.query);
+  // }
+  // await debouncedFetch();
 });
 </script>
 

@@ -7,22 +7,18 @@
     max-width="500"
   >
     <v-card class="mx-auto text-center pt-8 pb-4 px-4" width="100%">
-      <!-- صورة العميل -->
       <v-avatar size="80" class="mx-auto">
         <v-img :src="feedback.customer.avatar" alt="Customer Avatar" />
       </v-avatar>
 
-      <!-- اسم العميل -->
       <v-card-title class="text-h5 font-weight-bold roboto name">
         {{ feedback.customer.first_name }} {{ feedback.customer.last_name }}
       </v-card-title>
 
-      <!-- البريد الإلكتروني -->
       <div class="text-subtitle-2 text-grey-darken-1 mb-2 email">
         {{ feedback.customer.email }}
       </div>
 
-      <!-- تقييم العميل -->
       <div class="d-flex align-center justify-center">
         <v-rating
           color="amber"
@@ -34,12 +30,12 @@
         ></v-rating>
       </div>
 
-      <!-- الحالة (Featured / Not Featured) -->
       <v-chip
         :color="feedback.is_featured ? 'green' : 'grey'"
         class="ma-2"
         text-color="white"
         label
+        v-if="showIsFeatured"
       >
         {{ feedback.is_featured ? "Featured" : "Not Featured" }}
       </v-chip>
@@ -62,6 +58,7 @@
 import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 import LoadingProgressLinear from "../global/LoadingProgressLinear.vue";
 import axiosClient from "@/axiosClient";
+import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
   dialog: {
@@ -73,6 +70,24 @@ const props = defineProps({
     default: () => ({}),
   },
 });
+
+const router = useRouter();
+const route = useRoute();
+
+// const closeFeedback = () => {
+//   const query = { ...router.currentRoute.value.query };
+
+//   delete query.id;
+//   delete query.email;
+//   const position = {
+//     x: window.scrollX,
+//     y: window.scrollY,
+//   };
+//   sessionStorage.setItem("scrollPosition", JSON.stringify(position));
+//   router.replace({ query });
+// };
+
+const showIsFeatured = route.name == "dashboard-show-product" ? false : true;
 
 const city = reactive({
   id: "",

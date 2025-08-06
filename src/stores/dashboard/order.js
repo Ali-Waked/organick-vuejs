@@ -16,9 +16,9 @@ export const useOrderStore = defineStore("order-dashboard", () => {
         totalPage.value = response.data.last_page;
       }).catch(e => console.error(e)).finally(() => { loading.value = false });
   };
-  const getOrder = async (number) => {
+  const getOrder = async (number, notify = '') => {
     await axiosClient
-      .get(`/dashboard/orders/${number}`)
+      .get(`/dashboard/orders/${number}?notify_id=${notify}`)
       .then((response) => {
         order.value = response.data;
         console.log(response);

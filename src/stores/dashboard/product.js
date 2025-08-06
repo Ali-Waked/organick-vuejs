@@ -67,9 +67,9 @@ export const useProductStore = defineStore("product", {
         .catch((error) => console.error(error));
     },
 
-    async showProduct(slug) {
+    async showProduct(slug, notifyId) {
       await axiosClient
-        .get(`/dashboard/products/${slug}`)
+        .get(`/dashboard/products/${slug}?notify_id=${notifyId}`)
         .then((response) => {
           console.log("datais ", response.data);
           this.product = response.data;

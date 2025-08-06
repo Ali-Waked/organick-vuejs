@@ -62,9 +62,9 @@ export const useUserStore = defineStore("dashboard-user", () => {
       });
   };
 
-  const getUser = async (userType, email) => {
+  const getUser = async (userType, email, notifyId) => {
     await axiosClient
-      .get(`/dashboard/users/${userType}/${email}`)
+      .get(`/dashboard/users/${userType}/${email}?notify_id=${notifyId}`)
       .then((response) => {
         data.value = response.data;
         // const socials = {};

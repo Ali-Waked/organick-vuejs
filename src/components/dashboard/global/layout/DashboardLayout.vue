@@ -4,11 +4,26 @@
     <DashboardNav />
 
     <v-main class="content pt-2 mb-8 position-relative">
-      <ActionAlert :icon="alert.icon" :background-color="alert.backgroundColor" :message="alert.message"
-        :class="alertClass" />
-      <v-progress-linear indeterminate size="100" bg-color="#525C60" width="30" color="#525C60"
-        class="position-absolute top-0 left-0" v-if="isLoading"></v-progress-linear>
-      <v-container :style="route.name == 'dashboard-chat' ? 'max-width: 100% !important;' : ''">
+      <ActionAlert
+        :icon="alert.icon"
+        :background-color="alert.backgroundColor"
+        :message="alert.message"
+        :class="alertClass"
+      />
+      <v-progress-linear
+        indeterminate
+        size="100"
+        bg-color="#525C60"
+        width="30"
+        color="#525C60"
+        class="position-absolute top-0 left-0"
+        v-if="isLoading"
+      ></v-progress-linear>
+      <v-container
+        :style="
+          route.name == 'dashboard-chat' ? 'max-width: 100% !important;' : ''
+        "
+      >
         <slot />
       </v-container>
     </v-main>
@@ -20,7 +35,7 @@
 import DashboardNav from "./DashboardNav.vue";
 import DashboardNavDrawer from "./DashboardNavDrawer.vue";
 import DashboardFooter from "./DashboardFooter.vue";
-import { inject, onMounted, reactive, ref } from "vue";
+import { computed, inject, onMounted, reactive, ref } from "vue";
 import ActionAlert from "../ActionAlert.vue";
 import debounce from "lodash.debounce";
 import { useRoute } from "vue-router";
@@ -33,6 +48,8 @@ const alertClass = reactive({
   active: false,
 });
 
+const registeredRole = computed(() => route.params.role.toLowerCase());
+
 onMounted(() => {
   emitter.on("showLoading", (status) => {
     isLoading.value = status;
@@ -43,10 +60,10 @@ onMounted(() => {
       type === "error"
         ? "red"
         : type === "info"
-          ? "blue"
-          : type === "worning"
-            ? "orange"
-            : "green";
+        ? "blue"
+        : type === "worning"
+        ? "orange"
+        : "green";
     alert.message = message;
     alert.icon = icon;
     alertClass.active = true;

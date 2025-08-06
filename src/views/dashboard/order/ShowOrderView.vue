@@ -31,10 +31,16 @@
                     <v-col class="roboto" cols="3">Customer Name</v-col>
                     <v-col class="open-sans">
                       <v-hover v-slot="{ isHovering, props }">
-                        <span v-bind="props"
-                          :class="[isHovering ? 'cursor-pointer text-blue-darken-1 text-decoration-underline' : '']"
-                          @click="ShowUserInfo(order.customer)">{{
-                            fullName }}</span>
+                        <span
+                          v-bind="props"
+                          :class="[
+                            isHovering
+                              ? 'cursor-pointer text-blue-darken-1 text-decoration-underline'
+                              : '',
+                          ]"
+                          @click="ShowUserInfo(order.customer)"
+                          >{{ fullName }}</span
+                        >
                       </v-hover>
                     </v-col>
                   </v-row>
@@ -42,8 +48,10 @@
                 <v-col cols="12" class="border-b pa-4">
                   <v-row>
                     <v-col class="roboto" cols="3">items</v-col>
-                    <v-col class="open-sans">{{ order.items.length }} {{ order.items.length > 1 ? 'items' : 'item'
-                      }}</v-col>
+                    <v-col class="open-sans"
+                      >{{ order.items.length }}
+                      {{ order.items.length > 1 ? "items" : "item" }}</v-col
+                    >
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pa-4">
@@ -51,13 +59,15 @@
                     <v-col class="roboto" cols="3">Total Price</v-col>
                     <v-col class="open-sans">{{
                       currencyFormat(order.amount, order.currency)
-                      }}</v-col>
+                    }}</v-col>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pa-4">
                   <v-row>
                     <v-col class="roboto" cols="3">Payment Method</v-col>
-                    <v-col class="open-sans">{{ order.payment.payment_method.name }}</v-col>
+                    <v-col class="open-sans">{{
+                      order.payment.payment_method.name
+                    }}</v-col>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pa-4">
@@ -70,9 +80,22 @@
                   <v-row>
                     <v-col class="roboto" cols="3">Status</v-col>
                     <v-col class="open-sans" cols="9">
-                      <v-chip-group filter mandatory variant="outlined" v-model="status"
-                        v-on:update:model-value="changeStatus" class="text-capitalize" column="">
-                        <v-chip v-for="sta in orderStatus()" :key="sta.name" :value="sta.name" :color="sta.color" link>
+                      <v-chip-group
+                        filter
+                        mandatory
+                        variant="outlined"
+                        v-model="status"
+                        v-on:update:model-value="changeStatus"
+                        class="text-capitalize"
+                        column=""
+                      >
+                        <v-chip
+                          v-for="sta in orderStatus()"
+                          :key="sta.name"
+                          :value="sta.name"
+                          :color="sta.color"
+                          link
+                        >
                           {{ sta.name }}
                         </v-chip>
                       </v-chip-group>
@@ -83,8 +106,14 @@
                   <v-row>
                     <v-col class="roboto" cols="3">Driver</v-col>
                     <v-col class="open-sans">
-                      <v-btn variant="tonal" class="open-sans" color="#274C5B" prepend-icon="mdi-plus-circle"
-                        @click="assignDriver()">Assign Driver</v-btn>
+                      <v-btn
+                        variant="tonal"
+                        class="open-sans"
+                        color="#274C5B"
+                        prepend-icon="mdi-plus-circle"
+                        @click="assignDriver()"
+                        >Assign Driver</v-btn
+                      >
                     </v-col>
                   </v-row>
                 </v-col>
@@ -112,19 +141,29 @@
                 <v-col cols="12" class="border-b pa-4">
                   <v-row>
                     <v-col class="roboto" cols="3">City</v-col>
-                    <v-col class="open-sans">{{ order.shipping_address.city.name }}</v-col>
+                    <v-col class="open-sans">{{
+                      order.shipping_address.city.name
+                    }}</v-col>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pa-4">
                   <v-row>
                     <v-col class="roboto" cols="3">Street</v-col>
-                    <v-col class="open-sans">{{ order.shipping_address.street }}</v-col>
+                    <v-col class="open-sans">{{
+                      order.shipping_address.street
+                    }}</v-col>
                   </v-row>
                 </v-col>
-                <v-col cols="12" class="pa-4" v-if="order.shipping_address.notes">
+                <v-col
+                  cols="12"
+                  class="pa-4"
+                  v-if="order.shipping_address.notes"
+                >
                   <v-row>
                     <v-col class="roboto" cols="3">Note</v-col>
-                    <v-col class="open-sans">{{ order.shipping_address.notes }}</v-col>
+                    <v-col class="open-sans">{{
+                      order.shipping_address.notes
+                    }}</v-col>
                   </v-row>
                 </v-col>
               </v-row>
@@ -140,7 +179,11 @@
           <v-col cols="12" lg="7">
             <div class="bg-white py- mt-4 rounded border overflow-hidden">
               <v-row class="parent row overflow-hidden pa-0 ma-0">
-                <v-col cols="12" class="border-b pa-4" v-if="order.customer.billing_address?.phone_number">
+                <v-col
+                  cols="12"
+                  class="border-b pa-4"
+                  v-if="order.customer.billing_address?.phone_number"
+                >
                   <v-row>
                     <v-col class="roboto" cols="3">Phone Number</v-col>
                     <v-col cols="6" class="open-sans">
@@ -148,22 +191,40 @@
                     </v-col>
                   </v-row>
                 </v-col>
-                <v-col cols="12" class="border-b pa-4" v-if="order.customer.billing_address?.city?.name">
+                <v-col
+                  cols="12"
+                  class="border-b pa-4"
+                  v-if="order.customer.billing_address?.city?.name"
+                >
                   <v-row>
                     <v-col class="roboto" cols="3">City</v-col>
-                    <v-col class="open-sans">{{ order.customer.billing_address?.city?.name }}</v-col>
+                    <v-col class="open-sans">{{
+                      order.customer.billing_address?.city?.name
+                    }}</v-col>
                   </v-row>
                 </v-col>
-                <v-col cols="12" class="pa-4" v-if="order.customer.billing_address?.street">
+                <v-col
+                  cols="12"
+                  class="pa-4"
+                  v-if="order.customer.billing_address?.street"
+                >
                   <v-row>
                     <v-col class="roboto" cols="3">Street</v-col>
-                    <v-col class="open-sans">{{ order.customer.billing_address?.street }}</v-col>
+                    <v-col class="open-sans">{{
+                      order.customer.billing_address?.street
+                    }}</v-col>
                   </v-row>
                 </v-col>
-                <v-col cols="12" class="pa-4" v-if="order.customer.billing_address?.notes">
+                <v-col
+                  cols="12"
+                  class="pa-4"
+                  v-if="order.customer.billing_address?.notes"
+                >
                   <v-row>
                     <v-col class="roboto" cols="3">Note</v-col>
-                    <v-col class="open-sans">{{ order.customer.billing_address.notes }}</v-col>
+                    <v-col class="open-sans">{{
+                      order.customer.billing_address.notes
+                    }}</v-col>
                   </v-row>
                 </v-col>
               </v-row>
@@ -184,10 +245,17 @@
                     <v-col class="roboto" cols="3">Full Name</v-col>
                     <v-hover v-slot="{ isHovering, props }">
                       <v-col cols="6" class="open-sans">
-                        <span v-bind="props"
-                          :class="[isHovering ? 'text-blue-darken-1 text-decoration-underline cursor-pointer' : '']"
-                          @click="ShowUserInfo(order.driver)">
-                          {{ order.driver.first_name }} {{ order.driver.last_name }}
+                        <span
+                          v-bind="props"
+                          :class="[
+                            isHovering
+                              ? 'text-blue-darken-1 text-decoration-underline cursor-pointer'
+                              : '',
+                          ]"
+                          @click="ShowUserInfo(order.driver)"
+                        >
+                          {{ order.driver.first_name }}
+                          {{ order.driver.last_name }}
                         </span>
                       </v-col>
                     </v-hover>
@@ -203,8 +271,14 @@
                   <v-row>
                     <v-col class="roboto" cols="3">Action</v-col>
                     <v-col class="open-sans">
-                      <v-btn variant="tonal" class="open-sans" color="#274C5B" prepend-icon="mdi-sync-circle"
-                        text="Change" @click="assignDriver()" />
+                      <v-btn
+                        variant="tonal"
+                        class="open-sans"
+                        color="#274C5B"
+                        prepend-icon="mdi-sync-circle"
+                        text="Change"
+                        @click="assignDriver()"
+                      />
                     </v-col>
                   </v-row>
                 </v-col>
@@ -224,7 +298,9 @@
           #Order Items Information
         </h3>
         <div class="mt-4">
-          <v-row class="row ma-0 pa-0 overflow-hidden row parent bg-white overflow-hidden rounded border">
+          <v-row
+            class="row ma-0 pa-0 overflow-hidden row parent bg-white overflow-hidden rounded border"
+          >
             <v-col cols="12">
               <v-row class="pa-4 bg-grey-lighten-2">
                 <v-col class="roboto">Image</v-col>
@@ -240,29 +316,39 @@
                 <!-- <template v-for="n in 10" :key="n"> -->
                 <v-col cols="12" v-for="(item, i) in order.items" :key="i">
                   <v-row class="align-center pa-0 ma-0">
-                    <v-col class="open-sans cursor-pointer" @click="showImage(item.product.image)">
+                    <v-col
+                      class="open-sans cursor-pointer"
+                      @click="showImage(item.product.image)"
+                    >
                       <img :src="item.product.image" :alt="item.product.name" />
                     </v-col>
 
-                    <v-col class='open-sans'><span>#{{ item.product_id
-                        }}</span></v-col>
+                    <v-col class="open-sans"
+                      ><span>#{{ item.product_id }}</span></v-col
+                    >
                     <v-col class="open-sans">
                       <v-hover v-slot="{ isHovering, props }">
-                        <span :class="[
-                          'cursor-pointer',
-                          isHovering ? 'text-decoration-underline text-blue-darken-1' : '',
-                        ]" @click="showProduct(item.product.slug)" v-bind="props">
+                        <span
+                          :class="[
+                            'cursor-pointer',
+                            isHovering
+                              ? 'text-decoration-underline text-blue-darken-1'
+                              : '',
+                          ]"
+                          @click="showProduct(item.product.slug)"
+                          v-bind="props"
+                        >
                           {{ item.product_name }}
                         </span>
                       </v-hover>
                     </v-col>
                     <v-col class="open-sans">{{
                       currencyFormat(item.price, order.currency_cod)
-                      }}</v-col>
+                    }}</v-col>
                     <v-col class="open-sans">{{ item.quantity }}</v-col>
                     <v-col class="open-sans">{{
                       getSubTotal(item.quantity, item.price)
-                      }}</v-col>
+                    }}</v-col>
                   </v-row>
                 </v-col>
                 <!-- </template> -->
@@ -278,17 +364,32 @@
 </pre>
   </div>
   <ShowImage :image-src="imageSrc" v-model:model-value="dialog" />
-  <AssignToDriver :driver-id="order.driver_id" v-model:dialog="order.dialog" :order-number="order.number"
-    @fetchOrder="fetchOrder" />
-  <DrawerAlert :title="alert.title" :text="alert.text" v-model:dialog="alert.dialog">
+  <AssignToDriver
+    :driver-id="order.driver_id"
+    v-model:dialog="order.dialog"
+    :order-number="order.number"
+    @fetchOrder="fetchOrder"
+  />
+  <DrawerAlert
+    :title="alert.title"
+    :text="alert.text"
+    v-model:dialog="alert.dialog"
+  >
     <template #action>
-      <v-btn variant="outlined" color="green" prepend-icon="mdi-repeat" @click="changeOrderStatus">Change Status</v-btn>
+      <v-btn
+        variant="outlined"
+        color="green"
+        prepend-icon="mdi-repeat"
+        @click="changeOrderStatus"
+        >Change Status</v-btn
+      >
     </template>
   </DrawerAlert>
   <NoDataFound v-if="!order" />
   <pre>
   {{ order }}
-</pre>
+</pre
+  >
 </template>
 
 <script setup>
@@ -365,7 +466,7 @@ const changeOrderStatus = async () => {
       order.value.status = status.value;
     })
     .catch((e) => {
-      emitter.emit("alert", ["error", 'error try agian late']);
+      emitter.emit("alert", ["error", "error try agian late"]);
       console.error(e);
       status.value = order.value.status;
     })
@@ -442,31 +543,43 @@ const orderStatus = () => {
   ];
 };
 const canChangeDriver = ref(true);
-watch(() => status.value,
+watch(
+  () => status.value,
   (newVal) => {
-    if (['pending', 'shipping', 'processing'].includes(toLower(newVal))) {
+    if (["pending", "shipping", "processing"].includes(toLower(newVal))) {
       canChangeDriver.value = true;
     } else {
       canChangeDriver.value = false;
     }
-  })
+  }
+);
 const fetchOrder = async () => {
   // console.log('fetching');
   emitter.emit("showLoading", true);
   const number = Number(route.params.order);
-  await orderStore.getOrder(number)
+  await orderStore.getOrder(number);
   emitter.emit("showLoading", false);
-}
-onMounted(async () => {
-  emitter.emit("showLoading", true);
-  const number = Number(route.params.order);
-  if (number) {
-    await orderStore.getOrder(number);
-    items.push({ title: order.value.number });
-    status.value = order.value.status;
+};
+// const number = ref(1);
+watch(
+  () => route.params.order,
+  async (newVal, oldVal) => {
+    emitter.emit("showLoading", true);
+    console.log("newVal", newVal, oldVal);
+    const number = Number(route.params.order);
+    const notify = route.query.notify;
+    if (number) {
+      await orderStore.getOrder(number, notify);
+      items[2] = { title: order.value.number };
+      status.value = order.value.status;
+      emitter.emit("showLoading", false);
+    }
+  },
+  {
+    immediate: true,
   }
-  emitter.emit("showLoading", false);
-});
+);
+// onMounted(async () => {});
 </script>
 
 <style lang="scss" scoped>
@@ -486,10 +599,9 @@ h3.title {
   }
 
   &.parent {
-
     // border: 1px solid;
     // border-radius: 6px;
-    >.v-col {
+    > .v-col {
       &:nth-of-type(even) {
         background-color: $cultured;
       }

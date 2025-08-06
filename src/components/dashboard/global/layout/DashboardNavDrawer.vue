@@ -20,18 +20,50 @@
         <v-divider class="mt-3"></v-divider>
 
         <v-list-item-group>
-          <template v-for="item in navItems" :key="item.name">
-            <v-list-item
-              class="pa-0 pl-3 mt-3 py-3"
-              :to="{ name: item.name }"
-              active-color="grey"
-              active-class="active-link"
-            >
-              <div class="link">
-                <v-icon :icon="item.icon" />
-                <span class="roboto">{{ item.label }}</span>
-              </div>
-            </v-list-item>
+          <template v-if="role == 'admin'">
+            <template v-for="item in navItemsForAdmin" :key="item.name">
+              <v-list-item
+                class="pa-0 pl-3 mt-3 py-3"
+                :to="{ name: item.name }"
+                active-color="grey"
+                active-class="active-link"
+              >
+                <div class="link">
+                  <v-icon :icon="item.icon" />
+                  <span class="roboto">{{ item.label }}</span>
+                </div>
+              </v-list-item>
+            </template>
+          </template>
+          <template v-if="role == 'driver'">
+            <template v-for="item in navItemsForDriver" :key="item.name">
+              <v-list-item
+                class="pa-0 pl-3 mt-3 py-3"
+                :to="{ name: item.name }"
+                active-color="grey"
+                active-class="active-link"
+              >
+                <div class="link">
+                  <v-icon :icon="item.icon" />
+                  <span class="roboto">{{ item.label }}</span>
+                </div>
+              </v-list-item>
+            </template>
+          </template>
+          <template v-if="role == 'moderator'">
+            <template v-for="item in navItemsForModerator" :key="item.name">
+              <v-list-item
+                class="pa-0 pl-3 mt-3 py-3"
+                :to="{ name: item.name }"
+                active-color="grey"
+                active-class="active-link"
+              >
+                <div class="link">
+                  <v-icon :icon="item.icon" />
+                  <span class="roboto">{{ item.label }}</span>
+                </div>
+              </v-list-item>
+            </template>
           </template>
         </v-list-item-group>
       </v-list>
@@ -42,14 +74,16 @@
 <script setup>
 import { onMounted, ref, inject, computed } from "vue";
 import AppLogo from "@/components/front/svgs/icons/AppLogo.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
+const role = route.params.role.toLowerCase();
 const drawer = ref(false);
 const rail = ref(true);
 const emitter = inject("emitter");
 
-const navItems = [
+const navItemsForAdmin = [
   {
     name: "dashboard",
     label: "Home",
@@ -124,6 +158,41 @@ const navItems = [
     name: "dashboard-reports",
     label: "Report",
     icon: "mdi-file-chart-outline", // clean report/chart look
+  },
+];
+
+const navItemsForDriver = [
+  {
+    name: "dashboard",
+    label: "Home",
+    icon: "mdi-view-dashboard-outline", // more dashboard-specific
+  },
+  {
+    name: "dashboard-orders",
+    label: "Orders",
+    icon: "mdi-cart-outline", // better suited than clipboard
+  },
+  {
+    name: "dashboard-chat",
+    label: "Chat",
+    icon: "mdi-chat-outline", // cleaner chat icon
+  },
+];
+const navItemsForModerator = [
+  {
+    name: "dashboard",
+    label: "Home",
+    icon: "mdi-view-dashboard-outline", // more dashboard-specific
+  },
+  {
+    name: "dashboard-orders",
+    label: "Orders",
+    icon: "mdi-cart-outline", // better suited than clipboard
+  },
+  {
+    name: "dashboard-chat",
+    label: "Chat",
+    icon: "mdi-chat-outline", // cleaner chat icon
   },
 ];
 

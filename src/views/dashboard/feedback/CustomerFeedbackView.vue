@@ -41,10 +41,6 @@
     :title="alert.title"
     @changeStatus="changeStatus($event)"
   />
-  <pre>
-  {{ feedbacks }}
-</pre
-  >
 </template>
 
 <script setup>
@@ -76,6 +72,10 @@ const showFeedback = reactive({
   dialog: false,
   data: {},
 });
+const position = reactive({
+  x: 0,
+  y: 0,
+});
 const { capitalizeFirstLetter } = formats();
 const filter = reactive({
   search: "",
@@ -98,6 +98,21 @@ const items = [
     title: "Customer Feedbacks",
   },
 ];
+
+watch(
+  () => showFeedback.dialog,
+  (newVal) => {
+    if (!newVal) {
+      const query = { ...router.currentRoute.value.query };
+
+      delete query.id;
+      delete query.email;
+
+      sessionStorage.setItem("scrollPosition", JSON.stringify(position));
+      router.replace({ query });
+    }
+  }
+);
 
 const changeStatusDialog = (feedback) => {
   alert.dialog = true;
@@ -132,6 +147,16 @@ const changeStatus = async (feedbackId) => {
 };
 
 const showFeedbackDialog = (feedback) => {
+  position.x = window.scrollX;
+  position.y = window.scrollY;
+  sessionStorage.setItem("scrollPosition", JSON.stringify(position));
+  router.replace({
+    query: {
+      ...router.currentRoute.value.query,
+      email: feedback.customer.email,
+      id: feedback.id,
+    },
+  });
   showFeedback.dialog = true;
   showFeedback.data = feedback;
 };
@@ -147,6 +172,10 @@ const updateRoute = (page) => {
   if (filter.sortingOrder) query.sorting_order = filter.sortingOrder;
 
   if (page && totalPage.value > 1) query.page = page;
+  if (route.query.id && route.query.email) {
+    query.id = route.query.id;
+    query.email = route.query.email;
+  }
 
   router.push({ path: route.path, query: query });
 };
@@ -167,6 +196,7 @@ const fetchFeedbacks = async () => {
         console.log("response", response.data.data);
         feedbacks.value = response.data.data;
         totalPage.value = response.data.last_page;
+        isShowFeedback(feedbacks.value);
       });
   } catch (e) {
     console.log("error", e);
@@ -181,10 +211,10 @@ const debouncedFetch = debounce(async () => {
 
 watch(
   () => ({ ...filter }),
-  () => {
+  async () => {
     emitter.emit("showLoading", true);
     page.value = 1;
-    debouncedFetch();
+    await debouncedFetch();
   },
   { deep: true }
 );
@@ -193,10 +223,21 @@ onBeforeUnmount(() => {
   debouncedFetch.cancel();
 });
 
-const getFeedbacks = async () => {
-  emitter.emit("showLoading", true);
-  await fetchFeedbacks();
+const isShowFeedback = (data) => {
+  const id = route.query.id;
+  const email = route.query.email;
+  if (id && email) {
+    const feedback = data.find((feed) => String(feed.id) === String(id));
+    if (feedback) {
+      showFeedbackDialog(feedback);
+    }
+  }
 };
+
+// const getFeedbacks = async () => {
+//   emitter.emit("showLoading", true);
+//   await fetchFeedbacks();
+// };
 
 onMounted(async () => {
   // await getFeedbacks();
