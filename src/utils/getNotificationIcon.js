@@ -35,8 +35,11 @@ export function getNotificationIcon(type) {
       return 'mdi-account-plus';
     case 'newsletter_subscribed':
       return 'mdi-email-newsletter';
-    case 'contact_message':
+    case 'contact_message': // Contact Us
       return 'mdi-email-alert';
+
+    case 'chat_message': // Chat
+      return 'mdi-chat-outline';
 
     // Ratings
     case 'product_rated':

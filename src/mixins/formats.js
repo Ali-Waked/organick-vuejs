@@ -11,7 +11,7 @@ const useFormats = () => {
   };
 
   const dateFormat = (date, locale = "en-US", options = {}) => {
-    if (!date) return "";
+    if (!date) return null;
     const defaultOptions = {
       year: "numeric",
       month: "long",

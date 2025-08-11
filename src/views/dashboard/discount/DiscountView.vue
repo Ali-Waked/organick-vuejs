@@ -263,6 +263,7 @@ const updateRoute = (page) => {
     query.discount_mode = filter.discount_mode[0].toLowerCase();
 
   if (filter.sortingOrder) query.sorting_order = filter.sortingOrder;
+
   if (route.query.id && route.query.name) {
     query.id = route.query.id;
     query.name = route.query.name;

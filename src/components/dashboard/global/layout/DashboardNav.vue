@@ -213,6 +213,24 @@ onMounted(async () => {
       ]);
       console.log(e);
       getNotifications();
+    })
+    .listen(".contact-message", (e) => {
+      emitter.emit("alert", [
+        "info",
+        e.message,
+        getNotificationIcon(e.type_notify),
+      ]);
+      console.log(e);
+      getNotifications();
+    })
+    .listen(".new-subscriber", (e) => {
+      emitter.emit("alert", [
+        "info",
+        e.message,
+        getNotificationIcon(e.type_notify),
+      ]);
+      console.log(e);
+      getNotifications();
     });
   await getNotifications();
 });

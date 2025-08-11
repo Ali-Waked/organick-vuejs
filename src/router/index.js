@@ -392,6 +392,15 @@ const routes = [
         component: () => import("@/views/dashboard/product/ProductsView.vue"),
       },
       {
+        path: "contact-us",
+        name: "dashboard-contact-us",
+        meta: {
+          title: "Contact Us",
+          roles: ['admin', 'moderator']
+        },
+        component: () => import("@/views/dashboard/contact/ContactUsView.vue"),
+      },
+      {
         path: "discount",
         name: "dashboard-discount",
         meta: {

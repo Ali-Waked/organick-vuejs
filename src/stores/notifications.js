@@ -3,6 +3,7 @@ import { inject, ref } from "vue";
 import axiosClient from "../axiosClient";
 import { useRouter } from "vue-router";
 import { toLower } from "lodash";
+import { id } from "vuetify/locale";
 
 export const useNotificationStore = defineStore("notifications", () => {
   const notifications = ref([]);
@@ -81,7 +82,7 @@ export const useNotificationStore = defineStore("notifications", () => {
     const target = {
       name: link.name,
       params: link.params ?? {},
-      query: { notify: id, ...(link.query ?? {}) },
+      query: { ...current.query, notify: id, ...(link.query ?? {}) },
     };
     if (isSameRoute(current, link)) {
       router.replace({ name: target.name, params: target.params, query: target.query });
@@ -153,6 +154,18 @@ export const useNotificationStore = defineStore("notifications", () => {
       return {
         name: "dashboard-show-customer-information",
         query: { email: data.customer.email, name: data.customer.name },
+      };
+    }
+    if (type.startsWith("contact_message")) {
+      return {
+        name: "dashboard-contact-us",
+        query: { email: data.data.email, name: data.data.name, subject: data.data.subject, id: data.data.id },
+      };
+    }
+    if (type.startsWith("newsletter_subscribed")) {
+      return {
+        name: "dashboard-contact-us",
+        query: { email: data.data.email, name: data.data.name, subject: data.data.subject, id: data.data.id },
       };
     }
   }

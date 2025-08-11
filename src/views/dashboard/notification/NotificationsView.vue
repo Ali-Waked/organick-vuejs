@@ -54,14 +54,14 @@
                 <div class="d-flex align-center ga-4">
                   <div>
                     <v-icon
-                      :icon="getNotificationIcon(notify.data.type)"
+                      :icon="getNotificationIcon(notify.data.type_notify)"
                       class="text-grey"
                       size="28"
                     />
                   </div>
                   <div>
                     <div class="title roboto text-capitalize">
-                      {{ notify.data.type.replace("_", " ") }}
+                      {{ notify.data.type_notify.replace("_", " ") }}
                     </div>
                     <div class="message open-sans">
                       <span>{{ notify.data.message }} </span>

@@ -135,6 +135,11 @@ const navItemsForAdmin = [
     icon: "mdi-tag-outline", // sale
   },
   {
+    name: "dashboard-contact-us",
+    label: "Contact Us",
+    icon: "mdi-email-outline", // email icon for contact
+  },
+  {
     name: "dashboard-cities",
     label: "Cities",
     icon: "mdi-city-variant-outline", // clearer city representation
