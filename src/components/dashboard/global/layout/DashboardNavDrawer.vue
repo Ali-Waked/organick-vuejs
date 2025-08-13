@@ -105,6 +105,11 @@ const navItemsForAdmin = [
     icon: "mdi-newspaper-variant-outline", // more distinct news icon
   },
   {
+    name: "dashboard-subscribers",
+    label: "Subscribers",
+    icon: "mdi-newspaper-variant-outline", // more distinct news icon
+  },
+  {
     name: "dashboard-orders",
     label: "Orders",
     icon: "mdi-cart-outline", // better suited than clipboard

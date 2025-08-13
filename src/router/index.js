@@ -401,6 +401,15 @@ const routes = [
         component: () => import("@/views/dashboard/contact/ContactUsView.vue"),
       },
       {
+        path: "newsletter/subscribers",
+        name: "dashboard-subscribers",
+        meta: {
+          title: "Subscribers",
+          roles: ['admin', 'moderator']
+        },
+        component: () => import("@/views/dashboard/news/SubsribersView.vue"),
+      },
+      {
         path: "discount",
         name: "dashboard-discount",
         meta: {
@@ -544,15 +553,15 @@ const routes = [
         },
         component: () => import("@/views/dashboard/DashboardView.vue"),
       },
-      {
-        path: "users/subscribers",
-        name: "dashboard-subscribers",
-        meta: {
-          title: "Users",
-          roles: ['admin']
-        },
-        component: () => import("@/views/dashboard/SubscribersView.vue"),
-      },
+      // {
+      //   path: "users/subscribers",
+      //   name: "dashboard-subscribers",
+      //   meta: {
+      //     title: "Users",
+      //     roles: ['admin']
+      //   },
+      //   component: () => import("@/views/dashboard/SubscribersView.vue"),
+      // },
       // {
       //   path: "customers",
       //   name: "dashboard-customers",

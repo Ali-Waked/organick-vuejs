@@ -359,7 +359,6 @@
       </div>
     </div>
     <pre>
-  <!-- {{ order }} -->
   {{ 'can change ' + canChangeDriver }}
 </pre>
   </div>

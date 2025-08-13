@@ -13,7 +13,7 @@
         <v-btn @click="dialog = false" variant="tonal" color="grey"
           >cancel</v-btn
         >
-        <slot name="action" />
+        <slot name="action" :extraData="extraData" />
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -28,6 +28,10 @@ const props = defineProps({
   },
   text: {
     type: String,
+  },
+  extraData: {
+    type: Object,
+    default: () => ({}),
   },
   dialog: {
     type: Boolean,
