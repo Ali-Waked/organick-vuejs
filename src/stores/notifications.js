@@ -163,9 +163,10 @@ export const useNotificationStore = defineStore("notifications", () => {
       };
     }
     if (type.startsWith("newsletter_subscribed")) {
+      console.log('data', data);
       return {
-        name: "dashboard-contact-us",
-        query: { email: data.data.email, name: data.data.name, subject: data.data.subject, id: data.data.id },
+        name: "dashboard-subscribers",
+        query: { email: data.subscriber.email, id: data.subscriber.id },
       };
     }
   }

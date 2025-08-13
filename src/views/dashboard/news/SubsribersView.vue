@@ -173,11 +173,11 @@ const data = reactive({
   discount: {},
   dialog: false,
 });
-const showSubscriberDialog = async ({ id }) => {
+const showSubscriberDialog = async ({ id }, notify_id = null) => {
   emitter.emit("showLoading", true);
   try {
     await axiosClient
-      .get(`/dashboard/news/subscribers/${id}`)
+      .get(`/dashboard/news/subscribers/${id}?notify_id=${notify_id}`)
       .then((response) => {
         position.x = window.scrollX;
         position.y = window.scrollY;
@@ -283,6 +283,22 @@ watch(
     debouncedFetch();
   },
   { deep: true, immediate: true }
+);
+watch(
+  () => route.query.notify,
+  async (newVal, oldVal) => {
+    if (newVal == oldVal) {
+      return;
+    }
+    emitter.emit("showLoading", true);
+    const notify = route.query.notify;
+    const id = route.query.id;
+    const email = route.query.email;
+    if (notify && id && email) {
+      await showSubscriberDialog({ id: id }, notify);
+    }
+    emitter.emit("showLoading", false);
+  }
 );
 onBeforeUnmount(() => {
   debouncedFetch.cancel();
