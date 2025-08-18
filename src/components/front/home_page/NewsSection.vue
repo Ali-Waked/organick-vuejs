@@ -3,19 +3,35 @@
     <v-container>
       <v-row align="end">
         <v-col cols="12" md="7">
-          <HeaderSection header="News" title="Discover weekly content about organic food, & more" class="flex-1" />
+          <HeaderSection
+            header="News"
+            title="Discover weekly content about organic food, & more"
+            class="flex-1"
+          />
         </v-col>
         <v-col cols="12" md="5">
-          <v-btn width="190" height="58" elevation="0" color="#274C5B" class="text-none d-none d-md-block ml-auto"
-            variant="outlined" @click="showLoading">
+          <v-btn
+            width="190"
+            height="58"
+            elevation="0"
+            color="#274C5B"
+            class="text-none d-none d-md-block ml-auto"
+            variant="outlined"
+            @click="showLoading"
+          >
             <span>Explore Now</span>
             <v-icon icon="mdi-arrow-right"></v-icon>
           </v-btn>
         </v-col>
       </v-row>
-      <div class="d-flex justify-center align-center gr-6 gc-12 mt-12 flex-column flex-lg-row">
-        <SingleNews imagesrc="news-news-image-two.png" />
-        <SingleNews imagesrc="Photo (9).png" />
+      <div
+        class="d-flex justify-center align-center gr-6 gc-12 mt-12 flex-column flex-lg-row"
+      >
+        <SingleNews
+          v-for="singleNews in news"
+          :key="singleNews.id"
+          :news="singleNews"
+        />
       </div>
     </v-container>
   </div>
@@ -23,18 +39,31 @@
 
 <script setup>
 import HeaderSection from "@/components/front/global/HeaderSection.vue";
-// import SingleNews from "@/components/front/global/SingleNews.vue";
-import { inject } from "vue";
+import SingleNews from "@/components/front/global/SingleNews.vue";
+import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import axiosClient from "../../../axiosClient";
 
 const router = useRouter();
 const emitter = inject("emitter");
+const news = ref([]);
 
 const showLoading = () => {
   emitter.emit("showLoading");
   window.scrollTo(0, 0);
   router.push({ name: "news" });
 };
+
+onMounted(async () => {
+  await axiosClient
+    .get("/news")
+    .then((response) => {
+      news.value = response.data.data.slice(0, 2);
+    })
+    .catch((error) => {
+      console.error("Error fetching news:", error);
+    });
+});
 </script>
 
 <style scoped lang="scss">

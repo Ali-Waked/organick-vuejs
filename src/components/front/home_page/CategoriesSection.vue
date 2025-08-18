@@ -1,16 +1,42 @@
 <template>
   <div class="categories-section section-padding">
     <v-container>
-      <HeaderSection header="Categories" title="Our Products" class="text-center" />
+      <HeaderSection
+        header="Categories"
+        title="Our Products"
+        class="text-center"
+      />
       <v-row class="pt-12" justify="center" v-if="products.length > 0">
-        <v-col cols="9" sm="6" md="4" lg="3" v-for="product in products" :key="product.id" class="overflow-hidden">
-          <ProductItem :rating="product.averageRating" :category-name="product.category.name"
-            :product-name="product.name" :old-price="product.price" :new-price="product.price" :image="product.image"
-            :slug="product.slug" :product-id="product.id" v-model:is-favorite="product.isFavorite" />
+        <v-col
+          cols="9"
+          sm="6"
+          md="4"
+          lg="3"
+          v-for="product in products"
+          :key="product.id"
+          class="overflow-hidden"
+        >
+          <ProductItem
+            :rating="product.averageRating"
+            :category-name="product.category.name"
+            :product-name="product.name"
+            :old-price="product.price"
+            :new-price="product.final_price"
+            :image="product.image"
+            :slug="product.slug"
+            :product-id="product.id"
+            v-model:is-favorite="product.isFavorite"
+          />
         </v-col>
       </v-row>
       <div class="action">
-        <v-btn variant="flat" class="text-none roboto mt-8" width="174" height="58" @click="showLoading">
+        <v-btn
+          variant="flat"
+          class="text-none roboto mt-8"
+          width="174"
+          height="58"
+          @click="showLoading"
+        >
           <span>Shop Now</span>
           <v-icon>mdi-arrow-right</v-icon>
         </v-btn>

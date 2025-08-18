@@ -12,12 +12,16 @@
 </template>
 <script setup>
 import { useLoadingStore } from "@/stores/loading";
-import { onMounted, ref } from "vue";
+import { defineAsyncComponent, onMounted, ref } from "vue";
 import axiosClient from "@/axiosClient";
 import BannerSection from "@/components/front/portfolio_page/BannerSection.vue";
 import GeneralInfo from "@/components/front/profile_page/GeneralInfo.vue";
 import BillingAddress from "@/components/front/profile_page/BillingAddress.vue";
-import UpdateInformationDialog from "../../components/front/profile_page/UpdateInformationDialog.vue";
+// import UpdateInformationDialog from "../../components/front/profile_page/UpdateInformationDialog.vue";
+
+const UpdateInformationDialog = defineAsyncComponent(() =>
+  import("@/components/front/profile_page/UpdateInformationDialog.vue")
+);
 
 const profile = ref({});
 const dialog = ref(false);
@@ -28,7 +32,6 @@ const edit = () => {
 };
 
 onMounted(async () => {
-  useLoadingStore().stopLoading();
   await axiosClient
     .get("/profile")
     .then((response) => {
@@ -38,6 +41,9 @@ onMounted(async () => {
     })
     .catch((e) => {
       console.error(e);
+    })
+    .finally(() => {
+      useLoadingStore().stopLoading();
     });
 });
 </script>

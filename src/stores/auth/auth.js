@@ -33,7 +33,7 @@ export const useAuthStore = defineStore("auth", {
           if (response.status === 200) {
             this.isAuth = true;
             this.redirect = true;
-          }
+              }
         })
         .catch((e) => {
           console.log(e);
@@ -123,6 +123,7 @@ export const useAuthStore = defineStore("auth", {
         });
     },
     async checkAuth() {
+this.loading = true;
       try {
         await this.getCsrfToken();
         const response = await axiosClient.get("/auth/user");
@@ -133,7 +134,9 @@ export const useAuthStore = defineStore("auth", {
       } catch (error) {
         this.isAuth = false; // If verification fails, set isAuth to false
         this.user = null;
-      }
+      } finally {
+	this.loading = false;
+}
     },
   },
 });

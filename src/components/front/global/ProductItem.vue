@@ -1,15 +1,27 @@
 <template>
   <div class="product-item position-relative">
     <v-hover v-slot="{ isHovering, props }">
-      <v-card :color="bgColor" :class="[
-        ' cursor-pointer main-transition w-100',
-        isHovering ? 'elevation-3' : 'elevation-0',
-      ]" v-bind="props" style="border-radius: 18px">
+      <v-card
+        :color="bgColor"
+        :class="[
+          ' cursor-pointer main-transition w-100',
+          isHovering ? 'elevation-3' : 'elevation-0',
+        ]"
+        v-bind="props"
+        style="border-radius: 18px"
+      >
         <div>
-
-          <div class="position-relative overflow-hidden pa-6" @click="showLoading(slug)"> <v-chip
-              class="text-capitalize open-sans" variant="flat" color="#274C5B"
-              style="font-size: 13px; color: #fff; border-radius: 8px">{{ categoryName }}</v-chip>
+          <div
+            class="position-relative overflow-hidden pa-6"
+            @click="showLoading(slug)"
+          >
+            <v-chip
+              class="text-capitalize open-sans"
+              variant="flat"
+              color="#274C5B"
+              style="font-size: 13px; color: #fff; border-radius: 8px"
+              >{{ categoryName }}</v-chip
+            >
             <div class="image d-flex justify-center align-center">
               <!-- <CategoryVegetable width="250" class="mt-n6" /> -->
               <img :src="image" width="250" alt="" />
@@ -19,36 +31,56 @@
               <v-divider class="my-1" color="gray"></v-divider>
               <div class="d-flex justify-space-between align-center">
                 <div class="price open-sans">
-                  <span class="old-price text-decoration-line-through">${{ oldPrice }}</span>
-                  <span class="new-price">${{ newPrice }}</span>
+                  <span
+                    class="old-price text-decoration-line-through"
+                    v-if="oldPrice != newPrice"
+                    >{{ currencyFormat(oldPrice) }}</span
+                  >
+                  <span class="new-price">{{ currencyFormat(newPrice) }}</span>
                 </div>
-                <v-rating color="#FFA858" length="5" half-increments style="pointer-events: none; font-size: 11px"
-                  size="15px" :model-value="rating"></v-rating>
+                <v-rating
+                  color="#FFA858"
+                  length="5"
+                  half-increments
+                  style="pointer-events: none; font-size: 11px"
+                  size="15px"
+                  :model-value="rating"
+                ></v-rating>
               </div>
             </div>
           </div>
           <div class="icons position-absolute" v-if="authStore.isCustomer">
-            <v-icon icon="mdi-heart" color="red-darken-2" :class="[isFavorite ? 'heart-icon' : '']"
-              @click="removeFormFavorite(productId)" />
-            <v-icon icon="mdi-heart-outline" color="red-darken-2" :class="[!isFavorite ? 'heart-icon' : '']"
-              @click="addToFavorite(productId)" />
+            <v-icon
+              icon="mdi-heart"
+              color="red-darken-2"
+              :class="[isFavorite ? 'heart-icon' : '']"
+              @click="removeFormFavorite(productId)"
+            />
+            <v-icon
+              icon="mdi-heart-outline"
+              color="red-darken-2"
+              :class="[!isFavorite ? 'heart-icon' : '']"
+              @click="addToFavorite(productId)"
+            />
           </div>
         </div>
       </v-card>
     </v-hover>
-
   </div>
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import CategoryVegetable from "@/components/front/svgs/image/CategoryVegetable.vue";
 import { inject } from "vue";
 import { useFavoriteStore } from "@/stores/front/favorite";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth/auth";
+import formats from "@/mixins/formats";
 
+const { currencyFormat } = formats();
 const authStore = useAuthStore();
+const route = useRoute();
 
 const props = defineProps({
   rating: { type: Number, default: 5 },
@@ -67,10 +99,10 @@ const emitter = inject("emitter");
 const favoriteStore = useFavoriteStore();
 const emit = defineEmits(["update:isFavorite"]);
 
-
 const addToFavorite = async (productId) => {
   console.log(productId);
-  await favoriteStore.addToFavorite(productId)
+  await favoriteStore
+    .addToFavorite(productId)
     .then(() => {
       emit("update:isFavorite", true);
       emitter.emit("showAlert", "Add Product To Favorite Successfully");
@@ -79,15 +111,14 @@ const addToFavorite = async (productId) => {
 };
 
 const removeFormFavorite = async (productId) => {
-  await favoriteStore.removeFromFavorite(productId)
-    .then(() => {
-      emit("update:isFavorite", false);
-      emitter.emit('showAlert', "Remove Product From Favorite Successfully");
-    })
-}
+  await favoriteStore.removeFromFavorite(productId).then(() => {
+    emit("update:isFavorite", false);
+    emitter.emit("showAlert", "Remove Product From Favorite Successfully");
+  });
+};
 
 const showLoading = (slug) => {
-  window.scrollTo(0, 0);
+  if (route.name === "single-shop" && route.params.product == slug) return;
   emitter.emit("showLoading");
   router.push({ name: "single-shop", params: { product: slug } });
   // setTimeout(() => {}, 5000);
@@ -148,7 +179,6 @@ const showLoading = (slug) => {
           // display: none;
           right: 0;
         }
-
       }
 
       // .mdi-heart {
@@ -161,11 +191,10 @@ const showLoading = (slug) => {
         // display: none;
         right: 0;
       }
-
     }
 
     // .mdi-heart {
-    //   display: none;  
+    //   display: none;
     // }
   }
 }

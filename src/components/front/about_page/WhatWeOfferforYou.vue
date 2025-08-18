@@ -8,12 +8,19 @@
         class="text-center"
       />
       <v-row class="mt-4">
-        <v-col cols="12" sm="6" md="4" lg="3" v-for="num in 4" :key="num">
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
+          v-for="category in categories"
+          :key="category.id"
+        >
           <v-sheet color="transparent d-flex flex-column align-center">
             <div class="category-image position-relative">
-              <img src="@/assets/images/about/Spicy.png" alt="spicy" />
+              <img :src="category.image" :alt="category.name" />
             </div>
-            <p class="category-name roboto mt-2">Spicy</p>
+            <p class="category-name roboto mt-2">{{ category.name }}</p>
           </v-sheet>
         </v-col>
       </v-row>
@@ -23,6 +30,21 @@
 
 <script setup>
 import HeaderSection from "@/components/front/global/HeaderSection.vue";
+import axiosClient from "../../../axiosClient";
+import { onMounted, ref } from "vue";
+
+const categories = ref([]);
+onMounted(() => {
+  // This is where you can fetch any data if needed
+  axiosClient
+    .get("/categories")
+    .then((response) => {
+      categories.value = response.data.slice(0, 4); // Limit to 4 categories
+    })
+    .catch((error) => {
+      console.error("Error fetching categories:", error);
+    });
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div class="single-shop" v-if="!loading">
+  <div class="single-shop" v-if="!loading && data.price">
     <BannerSection />
     <ProductsDetails :product="data" />
     <RelatedProducts />
@@ -13,13 +13,21 @@ import BannerSection from "@/components/front/single_shop_page/BannerSection.vue
 import ProductsDetails from "@/components/front/single_shop_page/ProductsDetails.vue";
 import RelatedProducts from "@/components/front/single_shop_page/RelatedProducts.vue";
 import { useLoadingStore } from "@/stores/loading";
-import { onBeforeMount, onMounted } from "vue";
+import { onBeforeMount, onMounted, watch } from "vue";
 import { useProductStore } from "../../stores/front/product";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 const productStore = useProductStore();
 const { data, loading } = storeToRefs(productStore);
 const route = useRoute();
+watch(
+  () => route.params.product,
+  async () => {
+    await productStore.show(route.params.product);
+    useLoadingStore().stopLoading();
+  },
+  { immediate: true }
+);
 onMounted(async () => {
   await productStore.show(route.params.product);
   useLoadingStore().stopLoading();

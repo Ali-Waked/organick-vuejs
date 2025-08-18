@@ -1,10 +1,10 @@
 <template>
   <div class="billing-address" v-if="data">
-    <h3 class="yellowtail">Billing Address</h3>
+    <h3 class="open-sans">Billing Address</h3>
     <div class="box mx-auto">
       <div class="row">
         <span class="roboto">Phone Number:</span>
-        <span class="open-sans">{{ data.phone_number ?? 'UN' }}</span>
+        <span class="open-sans">{{ data.phone_number ?? "UN" }}</span>
       </div>
       <div class="row">
         <span class="roboto">Street:</span>
@@ -42,6 +42,7 @@ defineProps({
     text-align: center;
     margin: 20px 0;
     position: relative;
+    letter-spacing: 2px;
     // background-color: #fff;
     &::after {
       content: "";
@@ -61,7 +62,7 @@ defineProps({
       content: "";
       position: absolute;
       height: 2px;
-      width: 170px;
+      width: 220px;
       background-color: #fff;
       top: 50%;
       left: 50%;

@@ -2,39 +2,64 @@
   <div class="orders pt-4">
     <BannerSection title="Orders" />
     <v-container>
-      <v-row class="has-scroll mx-auto my-12">
-        <v-col cols="12">
-          <v-row justify="center" class="roboto row-head">
-            <v-col cols="2">Order #</v-col>
-            <v-col cols="2" class="pl-8">Date</v-col>
-            <v-col cols="2" class="text-center">Status</v-col>
-            <v-col cols="2" lg="1">SubTotal</v-col>
-            <v-col cols="2" lg="1">Items</v-col>
-            <v-col cols="2" lg="1">Actions</v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12">
-          <v-row justify="center" class="open-sans row-items" v-for="order in orders" :key="order.id">
-            <v-col cols="2" class="font-weight-bold text-" style="color: #274c5b">#{{ order.number }}</v-col>
-            <v-col cols="2">{{ dateFormat(order.created_at) }}</v-col>
-            <v-col cols="2" class="text-center"><span :class="[
-              'd-inline-block text-center py-1 px-3 rounded cursor-default status text-white ',
-              getStatusBackground(order.status),
-            ]">{{ order.status }}</span></v-col>
-            <v-col cols="2" lg="1">{{ currencyFormat(order.amount) }}</v-col>
-            <v-col cols="2" lg="1">{{
-              getItemsCount(order.items_count)
-            }}</v-col>
-            <v-col cols="2" lg="1">
-              <v-btn color="purple" variant="flat" @click="showOrderDetails(order.number)">
-                <v-icon icon="mdi-eye" size="26px" />
-              </v-btn>
-              <v-tooltip text="Show Order Details" activator="parent" location="top">
-              </v-tooltip>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+      <div class="has-scroll overflow-y-hidden overflow-x-auto">
+        <v-row class="ma-0" style="min-width: 650px">
+          <v-col cols="12">
+            <v-row justify="center" class="roboto row-head">
+              <v-col cols="2">Order #</v-col>
+              <v-col cols="2" class="pl-8">Date</v-col>
+              <v-col cols="2" class="text-center">Status</v-col>
+              <v-col cols="2" lg="1">SubTotal</v-col>
+              <v-col cols="2" lg="1">Items</v-col>
+              <v-col cols="2" lg="1">Actions</v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="12">
+            <v-row
+              justify="center"
+              class="open-sans row-items"
+              v-for="order in orders"
+              :key="order.id"
+            >
+              <v-col
+                cols="2"
+                class="font-weight-bold text-"
+                style="color: #274c5b"
+                >#{{ order.number }}</v-col
+              >
+              <v-col cols="2">{{ dateFormat(order.created_at) }}</v-col>
+              <v-col cols="2" class="text-center"
+                ><span
+                  :class="[
+                    'd-inline-block text-center py-1 px-3 rounded cursor-default status text-white ',
+                    getStatusBackground(order.status),
+                  ]"
+                  >{{ order.status }}</span
+                ></v-col
+              >
+              <v-col cols="2" lg="1">{{ currencyFormat(order.amount) }}</v-col>
+              <v-col cols="2" lg="1">{{
+                getItemsCount(order.items_count)
+              }}</v-col>
+              <v-col cols="2" lg="1">
+                <v-btn
+                  color="purple"
+                  variant="flat"
+                  @click="showOrderDetails(order.number)"
+                >
+                  <v-icon icon="mdi-eye" size="26px" />
+                </v-btn>
+                <v-tooltip
+                  text="Show Order Details"
+                  activator="parent"
+                  location="top"
+                >
+                </v-tooltip>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </div>
     </v-container>
   </div>
 </template>
@@ -77,7 +102,6 @@ const showOrderDetails = (orderNumber) => {
 };
 
 onMounted(async () => {
-  useLoadingStore().stopLoading();
   await axiosClient
     .get("/orders")
     .then((response) => {
@@ -86,6 +110,9 @@ onMounted(async () => {
     })
     .catch((e) => {
       console.error(e);
+    })
+    .finally(() => {
+      useLoadingStore().stopLoading();
     });
 });
 </script>
@@ -101,7 +128,7 @@ onMounted(async () => {
   color: $altamira;
 
   &:not(:last-of-type) {
-    >div {
+    > div {
       border-bottom: 1px solid #999eee;
     }
   }

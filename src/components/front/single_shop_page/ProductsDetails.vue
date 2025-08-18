@@ -190,6 +190,7 @@ onMounted(() => {
     max-height: 600px;
     background-color: #f9f8f8;
     text-align: center;
+    width: 100%;
     height: 500px;
     overflow: hidden;
 
@@ -201,6 +202,7 @@ onMounted(() => {
 
     img {
       width: 100%;
+      max-width: 300px;
     }
 
     .icons {

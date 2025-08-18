@@ -1,21 +1,43 @@
 <template>
   <div class="single-news">
     <v-hover v-slot="{ isHovering, props }">
-      <v-sheet class="box position-relative cursor-pointer sheet" v-bind="props"
-        style="max-width: 95vw; max-height: 480px" @click="showLoading">
+      <v-sheet
+        class="box position-relative cursor-pointer sheet"
+        v-bind="props"
+        style="max-width: 95vw; max-height: 480px"
+        @click="showLoading"
+      >
         <img :src="news.image" class="w-100" alt="news image" />
-        <div class="date roboto position-absolute d-flex align-center justify-center">
-          {{ dateFormatForNews(news.published_at, "en-GB") }}<!-- 20 Mar -->
+        <div
+          class="date roboto position-absolute d-flex align-center justify-center"
+        >
+          {{ dateFormatForNews(news.published_at, "en-GB")
+          }}<!-- 20 Mar -->
         </div>
-        <v-card color="#fff" class="position-absolute card main-transition" :elevation="isHovering ? '12' : '5'">
+        <v-card
+          color="#fff"
+          class="position-absolute card main-transition"
+          :elevation="isHovering ? '12' : '5'"
+        >
           <div class="write-by d-flex align-center">
-            <v-icon class="d-inline-block ml-3 mr-1">{{ iconMap[news.type] }}</v-icon>
-            <span class="type roboto mt-2 ">{{ news.type }}</span>
+            <v-icon class="d-inline-block ml-3 mr-1">{{
+              iconMap[news.type]
+            }}</v-icon>
+            <span class="type roboto mt-2">{{ news.type }}</span>
           </div>
-          <v-card-title class="card-title roboto">{{ news.title }}</v-card-title>
-          <v-card-text class="card-text open-sans py-0">{{ news.subtitle }}</v-card-text>
+          <v-card-title class="card-title roboto">{{
+            news.title
+          }}</v-card-title>
+          <v-card-text class="card-text open-sans py-0">{{
+            news.subtitle
+          }}</v-card-text>
           <v-card-actions>
-            <v-btn width="170" height="60" elevation="0" class="text-none news-action">
+            <v-btn
+              width="170"
+              height="60"
+              elevation="0"
+              class="text-none news-action"
+            >
               <span>Read More</span>
               <v-icon icon="mdi-arrow-right"></v-icon>
             </v-btn>
@@ -36,7 +58,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-})
+});
 const { dateFormat, dateFormatForNews } = formats();
 // const image = computed(() => {
 //   return require(`@/assets/images/${imagesrc}`);
@@ -63,7 +85,6 @@ const showLoading = () => {
 
 <style scoped lang="scss">
 .single-news {
-
   //   overflow: hidden;
   img {
     max-width: 100%;
@@ -167,7 +188,8 @@ const showLoading = () => {
     }
   }
 
-  @media (max-width: 959px) {}
+  @media (max-width: 959px) {
+  }
 
   @media (max-width: 600px) {
     button {

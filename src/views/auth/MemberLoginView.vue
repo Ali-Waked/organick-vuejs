@@ -57,6 +57,7 @@ const email = ref("");
 const password = ref("");
 const auth = useAuthStore();
 const {
+user,
   loading,
   errors,
   isAuthenticated,
@@ -69,12 +70,19 @@ const router = useRouter();
 const route = useRoute();
 const login = async () => {
   await auth.login({ email: email.value, password: password.value });
+console.log(user);
   if (redirect) {
-    if (isAdmin) {
+//if(!user.value) {
+//await auth.checkAuth();
+//}
+    if (isAdmin.value) {
+console.log('isAdmin');
       router.push({ name: "dashboard", params: { role: "admin" } });
-    } else if (isDriver) {
+    } else if (isDriver.value) {
+console.log('driver');
       router.push({ name: "dashboard", params: { role: "driver" } });
-    } else if (isModerator) {
+    } else if (isModerator.value) {
+console.log('moderator');
       router.push({ name: "dashboard", params: { role: "moderator" } });
     } else {
       router.push({ name: "home" });

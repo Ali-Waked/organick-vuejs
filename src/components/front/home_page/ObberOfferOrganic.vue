@@ -29,6 +29,9 @@
           />
         </v-col>
       </v-row>
+<pre>
+{{data}}
+</pre>
       <v-btn
         width="80%"
         height="58"
@@ -45,6 +48,13 @@
 <script setup>
 import HeaderSection from "@/components/front/global/HeaderSection.vue";
 import ProductItem from "@/components/front/global/ProductItem.vue";
+import {onMounted,ref} from 'vue';
+import axiosClient from '@/axiosClient';
+const data = ref([]);
+
+onMounted(async() => {
+await axiosClient.get('/offers').then(response => data.value = response.data);
+})
 </script>
 
 <style scoped lang="scss">

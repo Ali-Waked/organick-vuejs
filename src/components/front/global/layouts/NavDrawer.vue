@@ -1,63 +1,107 @@
 <template>
   <v-navigation-drawer temporary v-model="navDrawer" width="320">
     <v-sheet class="has-scroll">
-      <div class="logo d-flex align-center pl-5 py-6 gc-1 cursor-pointer" @click="router.push({ name: 'home' })">
+      <div
+        class="logo d-flex align-center pl-5 py-6 gc-1 cursor-pointer"
+        @click="router.push({ name: 'home' })"
+      >
         <AppLogo width="35" height="40" />
         <span class="roboto">Organick</span>
       </div>
       <v-divider />
       <ul class="links roboto d-flex flex-column justify-center gc-6">
-        <li class="main-transition position-relative underline-on-hover cursor-pointer">
-          <router-link class="main-transition" :to="{ name: 'home' }" @click="showLoading">
+        <li
+          class="main-transition position-relative underline-on-hover cursor-pointer"
+        >
+          <router-link
+            class="main-transition"
+            :to="{ name: 'home' }"
+            @click="showLoading"
+          >
             <v-icon icon="mdi-home" class="mr-2" />
             home
           </router-link>
         </li>
-        <li class="main-transition position-relative underline-on-hover cursor-pointer">
-          <router-link class="main-transition" :to="{ name: 'about' }" @click="showLoading">
+        <li
+          class="main-transition position-relative underline-on-hover cursor-pointer"
+        >
+          <router-link
+            class="main-transition"
+            :to="{ name: 'about' }"
+            @click="showLoading"
+          >
             <v-icon icon="mdi-information-outline" class="mr-2" />
             about
           </router-link>
         </li>
-        <li class="main-transition position-relative underline-on-hover cursor-pointer">
-          <router-link class="main-transition" :to="{ name: 'shop' }" @click="showLoading">
+        <li
+          class="main-transition position-relative underline-on-hover cursor-pointer"
+        >
+          <router-link
+            class="main-transition"
+            :to="{ name: 'shop' }"
+            @click="showLoading"
+          >
             <v-icon icon="mdi-cart-outline" class="mr-2" />
             shop
           </router-link>
         </li>
         <template v-if="isAuth">
-
           <template v-if="authStore.isCustomer">
-            <li v-for="page in pages" :key="page.title"
-              class="open-sans main-transition position-relative underline-on-hover d-flex align-center cursor-pointer">
-              <router-link class="main-transition" :to="page.link" @click="showLoading">
+            <li
+              v-for="page in pages"
+              :key="page.title"
+              class="open-sans main-transition position-relative underline-on-hover d-flex align-center cursor-pointer"
+            >
+              <router-link
+                class="main-transition"
+                :to="page.link"
+                @click="showLoading"
+              >
                 <v-icon :icon="page.icon" class="mr-2" />
                 {{ page.title }}
               </router-link>
             </li>
           </template>
-          <li class="open-sans main-transition position-relative underline-on-hover d-flex align-center cursor-pointer"
-            v-if="authStore.isAdmin">
-            <router-link class="main-transition" :to="{ name: 'dashboard', params: { role: 'admin' } }"
-              @click="showLoading">
+          <li
+            class="open-sans main-transition position-relative underline-on-hover d-flex align-center cursor-pointer"
+            v-if="authStore.isAdmin"
+          >
+            <router-link
+              class="main-transition"
+              :to="{ name: 'dashboard', params: { role: 'admin' } }"
+              @click="showLoading"
+            >
               <v-icon icon="mdi-view-dashboard-outline" class="mr-2" />
               Dashboard
             </router-link>
-
-          </li>
-          <li class="main-transition position-relative underline-on-hover cursor-pointer"
-            @click="showLoading(); logout()">
-
-            <span class="logout"><v-icon icon="mdi-logout" class="mr-2" /> logout</span>
-
           </li>
         </template>
-        <li class="main-transition position-relative underline-on-hover cursor-pointer">
-          <router-link class="main-transition" :to="{ name: 'news' }" @click="showLoading">
+        <li
+          class="main-transition position-relative underline-on-hover cursor-pointer"
+        >
+          <router-link
+            class="main-transition"
+            :to="{ name: 'news' }"
+            @click="showLoading"
+          >
             <v-icon icon="mdi-newspaper" class="mr-2" />
             news
           </router-link>
         </li>
+        <template v-if="isAuth">
+          <li
+            class="main-transition position-relative underline-on-hover cursor-pointer"
+            @click="
+              showLoading();
+              logout();
+            "
+          >
+            <span class="logout"
+              ><v-icon icon="mdi-logout" class="mr-2" /> logout</span
+            >
+          </li>
+        </template>
       </ul>
     </v-sheet>
   </v-navigation-drawer>
@@ -68,7 +112,7 @@ import AppLogo from "@/components/front/svgs/icons/AppLogo.vue";
 import { useAuthStore } from "@/stores/auth/auth";
 import { storeToRefs } from "pinia";
 import { inject, onMounted, ref } from "vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 import { useLoadingStore } from "@/stores/loading";
 const emitter = inject("emitter");
 const navDrawer = ref(false);
@@ -157,6 +201,7 @@ ul.links {
       text-transform: capitalize;
       color: $arapawa;
       display: block;
+      flex: 1;
 
       &.router-link-exact-active {
         pointer-events: none;

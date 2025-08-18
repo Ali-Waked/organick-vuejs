@@ -8,7 +8,7 @@
     <ObberOfferOrganic />
     <WhoWeAre />
     <GallerySection />
-    <!-- <NewsSection /> -->
+    <NewsSection />
     <SubscribeSection />
   </div>
 </template>

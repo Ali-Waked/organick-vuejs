@@ -10,7 +10,6 @@
         v-slot="{ isSelected, selectedClass, toggle }"
         :value="payMethod.slug"
       >
-        <!-- {{ payMethod.slug }} -->
         <v-card
           variant="outlined"
           :color="isSelected ? 'blue-lighten-3' : 'grey'"
@@ -18,10 +17,7 @@
             'd-inline-flex align-center justify-center flex-column ga-2 card-method opacity-70',
             selectedClass,
           ]"
-          @click="
-            toggle;
-            console.log(payMethod.slug);
-          "
+          @click="toggle"
         >
           <img :src="payMethod.icon" :alt="payMethod.name" />
           <span
@@ -34,7 +30,6 @@
         </v-card>
       </v-item>
     </template>
-    <!-- {{ method }} -->
   </v-item-group>
 </template>
 

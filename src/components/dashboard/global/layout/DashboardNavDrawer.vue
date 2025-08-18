@@ -107,7 +107,7 @@ const navItemsForAdmin = [
   {
     name: "dashboard-subscribers",
     label: "Subscribers",
-    icon: "mdi-newspaper-variant-outline", // more distinct news icon
+    icon: "mdi-account-multiple-outline", // clearer for subscribers
   },
   {
     name: "dashboard-orders",

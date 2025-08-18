@@ -4,27 +4,49 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" lg="7">
-          <div class="header open-sans order-information">Order Information</div>
+          <div class="header open-sans order-information">
+            Order Information
+          </div>
         </v-col>
         <v-col cols="12" class="info" :lg="7">
           <KeyValueRow label="#Number:">{{ order.number }}</KeyValueRow>
-          <KeyValueRow label="Created Order Date:">{{ dateFormat(order.created_at) }}</KeyValueRow>
-          <KeyValueRow label="Drivery Price:">{{ currencyFormat(order.shipping_address.city.driver_price) }}
+          <KeyValueRow label="Created Order Date:">{{
+            dateFormat(order.created_at)
+          }}</KeyValueRow>
+          <KeyValueRow label="Drivery Price:"
+            >{{ currencyFormat(order.shipping_address.city.driver_price) }}
           </KeyValueRow>
-          <KeyValueRow label="Total Price:">{{ currencyFormat(order.amount) }}</KeyValueRow>
-          <KeyValueRow label="Payment Method:">{{ order.payment.payment_method.name }}</KeyValueRow>
+          <KeyValueRow label="Total Price:">{{
+            currencyFormat(order.amount)
+          }}</KeyValueRow>
+          <KeyValueRow label="Payment Method:">{{
+            order.payment.payment_method.name
+          }}</KeyValueRow>
           <KeyValueRow label="Status:">
-            <span :class="[
-              'd-inline-block text-center py-1 px-3 rounded cursor-default status text-white ',
-              statusClass,
-            ]">{{ order.status }}</span>
+            <span
+              :class="[
+                'd-inline-block text-center py-1 px-3 rounded cursor-default status text-white ',
+                statusClass,
+              ]"
+              >{{ order.status }}</span
+            >
           </KeyValueRow>
 
-          <v-row v-if="['stripe', 'paypal'].includes(order.payment.payment_method.name)">
-            <v-col class="roboto title font-weight-bold" cols="6">Action:</v-col>
+          <v-row
+            v-if="
+              ['stripe', 'paypal'].includes(order.payment.payment_method.name)
+            "
+          >
+            <v-col class="roboto title font-weight-bold" cols="6"
+              >Action:</v-col
+            >
             <v-col class="open-sans" cols="6">
               <div class="position-relative buy-btn">
-                <v-btn color="#525C60" variant="flat" @click="showOrderDetails(order.number)">
+                <v-btn
+                  color="#525C60"
+                  variant="flat"
+                  @click="showOrderDetails(order.number)"
+                >
                   <v-icon icon="mdi-credit-card" size="26px" />
                 </v-btn>
                 <v-tooltip text="PAY NOW" activator="parent" location="top">
@@ -36,13 +58,22 @@
       </v-row>
       <v-row justify="center">
         <v-col cols="12" lg="7">
-          <div class="header open-sans order-address">Order Shipping Address</div>
+          <div class="header open-sans order-address">
+            Order Shipping Address
+          </div>
         </v-col>
         <v-col cols="12" class="info" :lg="7">
-          <KeyValueRow label="Phone Number:">{{ order.shipping_address.phone_number }}</KeyValueRow>
-          <KeyValueRow label="Street:">{{ order.shipping_address.street }}</KeyValueRow>
-          <KeyValueRow label="City:">{{ order.shipping_address.city.name }}</KeyValueRow>
-          <KeyValueRow v-if="order.shipping_address.notes" label="Note:">{{ order.shipping_address.notes }}
+          <KeyValueRow label="Phone Number:">{{
+            order.shipping_address.phone_number
+          }}</KeyValueRow>
+          <KeyValueRow label="Street:">{{
+            order.shipping_address.street
+          }}</KeyValueRow>
+          <KeyValueRow label="City:">{{
+            order.shipping_address.city.name
+          }}</KeyValueRow>
+          <KeyValueRow v-if="order.shipping_address.notes" label="Note:"
+            >{{ order.shipping_address.notes }}
           </KeyValueRow>
         </v-col>
       </v-row>
@@ -52,16 +83,32 @@
         </v-col>
         <v-col cols="12" lg="7">
           <v-row justify="center" class="roboto row-head">
-            <v-col cols="2" lg="3" class="roboto title font-weight-bold">Image</v-col>
-            <v-col cols="3" lg="3" class="pl-8 roboto title font-weight-bold">Name</v-col>
-            <v-col cols="2" lg="2" class="roboto title font-weight-bold">Price</v-col>
-            <v-col cols="2" lg="2" class="roboto title font-weight-bold text-center">Quantity</v-col>
-            <v-col cols="2" lg="2" class="roboto title font-weight-bold">SubTotal</v-col>
-            <!-- <v-col cols="2" lg="1">Actions</v-col> -->
+            <v-col cols="2" lg="3" class="roboto title font-weight-bold"
+              >Image</v-col
+            >
+            <v-col cols="3" lg="3" class="pl-8 roboto title font-weight-bold"
+              >Name</v-col
+            >
+            <v-col cols="2" lg="2" class="roboto title font-weight-bold"
+              >Price</v-col
+            >
+            <v-col
+              cols="2"
+              lg="2"
+              class="roboto title font-weight-bold text-center"
+              >Quantity</v-col
+            >
+            <v-col cols="2" lg="2" class="roboto title font-weight-bold"
+              >SubTotal</v-col
+            >
           </v-row>
         </v-col>
         <v-col cols="12" lg="7" class="items">
-          <OrderItemRow v-for="item in order.items" :key="item.id" :item="item" />
+          <OrderItemRow
+            v-for="item in order.items"
+            :key="item.id"
+            :item="item"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -96,21 +143,22 @@ const getStatusBackground = (status) => {
   return map[toLower(status)] || "bg-grey";
 };
 
-const statusClass = computed(() =>
-  getStatusBackground(order.value.status)
-);
+const statusClass = computed(() => getStatusBackground(order.value.status));
 
 onMounted(async () => {
-  await axiosClient.get(`/orders/${route.params.order}`)
-    .then(response => {
+  await axiosClient
+    .get(`/orders/${route.params.order}`)
+    .then((response) => {
       console.log(response);
       order.value = response.data;
-    }).catch(e => {
-      console.error(e);
-    }).finally(() => {
-      useLoadingStore().stopLoading();
     })
-})
+    .catch((e) => {
+      console.error(e);
+    })
+    .finally(() => {
+      useLoadingStore().stopLoading();
+    });
+});
 </script>
 
 <style lang="scss" scoped>
@@ -134,7 +182,6 @@ onMounted(async () => {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: -2;
-
   }
 
   &::before {
@@ -175,7 +222,6 @@ onMounted(async () => {
     &.order-items::before {
       width: 165px;
     }
-
   }
 
   @media screen and (max-width: 600px) {
@@ -193,7 +239,6 @@ onMounted(async () => {
     &.order-items::before {
       width: 150px;
     }
-
   }
 }
 
@@ -205,7 +250,7 @@ onMounted(async () => {
   position: relative;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -5px;
     left: 0px;
